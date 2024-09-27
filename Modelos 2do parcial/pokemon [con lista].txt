@@ -1,0 +1,140 @@
+ACCION A: arreglo de [1..151] de alfanumerico ES
+AMBIENTE
+
+CAPTURAS = registro
+  clave = registro
+    cod_region: N(4)
+    cod_usuario: N(10)
+  F_R
+  cod_pokemon: 1..151
+  puntosdeexp: N(5)
+  fecha_cap: FECHA
+  estado_pok: ("E","I","D")
+  estado_us: ("A","S","B")
+F_R
+
+MOV: Archivo de CAPTURAS ordenado por clave y cod_pokemon
+m: CAPTURAS
+
+USUARIOS = registro
+  clave = registro
+    cod_region: N(4)
+    cod_usuario: N(10)
+  F_R
+  correo: AN(50)
+  experiencia: N(7)
+F_R
+
+MAE, SAL: Archivo de USUARIOS ordenado por clave
+ma, s: USUARIOS
+
+PROCEDIMIENTO LEER_MAE() ES
+  LEER(MAE, ma)
+  SI FDA(MAE) ENTONCES
+    ma.clave.cod_region:= HV
+    ma.clave.cod_usuario:= HV
+  F_S
+F_P
+
+PROCEDIMIENTO LEER_MOV() ES
+  LEER(MOV, m)
+  SI FDA(MOV) ENTONCES
+    m.clave.cod_region:= HV
+    m.clave.cod_usuario:= HV
+  F_S
+F_P
+
+resg_pok_name, resg_pok_name2: AN
+cont_descansando, cont_mayor: entero
+
+PROCESO
+
+ABRIR E/(MAE)
+ABRIR E/(MOV)
+ABRIR S/(SAL)
+LEER(MAE, ma)
+LEER(MOV, m)
+cont_mayor:= 0
+cont_descansando:= 0
+resg_pok_name:= A[m.cod_pokemon]
+
+MIENTRAS ma.clave<>HV o m.clave<>HV HACER
+  SI ma.clave < m.clave ENTONCES
+    s:= ma
+    ESC(SAL, s)
+    LEER_MAE()
+  SINO
+    SI ma.clave = m.clave ENTONCES
+      //punto 4
+      SI m.cod_pokemon = "D" ENTONCES
+        cont_descansando:= cont_descansando + 1
+        SI resg_pok_name <> A[m.cod_pokemon] ENTONCES
+          SI cont_descansando > cont_mayor ENTONCES
+            cont_mayor:= cont_descansando
+            cont_descansando:= 0
+            resg_pok_name2:= resg_pok_name
+          SINO
+            cont_descansando:= 0
+          F_S
+          resg_pok_name:= A[m.cod_pokemon]
+        F_S
+      F_S
+      
+      //punto 3 y 1
+      SI m.estado_us = "S" ENTONCES
+        ESC("Usuario", ma.clave.cod_usuario,"dado de baja")
+      SINO
+        SI m.estado_us = "A" ENTONCES
+          SI m.estado_pok = "E" ENTONCES
+            s.experiencia:= s.experiencia + (m.puntosdeexp * 2)
+            ESC(SAL, s)
+          SINO
+            s.experiencia:= s.experiencia + m.puntosdeexp
+            ESC(SAL, s)
+          F_S
+        F_S
+      F_S
+      LEER_MAE()
+      LEER_MOV()
+
+    SINO
+      //punto 2
+      SI m.estado_us = "A" ENTONCES
+        s.clave.cod_region:= m.clave.cod_region
+        s.clave.cod_user:= m.clave.cod_user
+        s.correo:= ""
+        SI m.estado_us = "A" ENTONCES
+          SI m.estado_pok = "E" ENTONCES
+            s.experiencia:= s.experiencia + (m.puntosdeexp * 2)
+          SINO
+            s.experiencia:= s.experiencia + m.puntosdeexp
+          F_S
+        F_S
+        ESC(SAL, s)
+      F_S
+      LEER_MOV()
+    F_S
+  F_S
+F_M
+ESC ("El nombre del pokemon que la mayoria de los usuarios lo tienen descansando es: resg_pok_name2")
+ESC("La cantidad de usuarios que lo poseen es de:", cont_descansando)
+CERRAR(MOV)
+CERRAR(MAE)
+CERRAR(SAL)
+FIN.
+
+
+
+
+  
+
+
+          
+
+
+
+
+
+      
+
+
