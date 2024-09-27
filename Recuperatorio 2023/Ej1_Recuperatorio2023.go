@@ -3,7 +3,9 @@
 Accion EJ1 es
 Ambiente
 	clientes = registro //maestro
-		nroCliente: N(3) //ordenado por
+		clave = registro
+			nroCliente: N(3) //ordenado por
+		fr
 		apellidoNombre: AN(30)
 		dni: N(8)
 		idPaquete:N(10)
@@ -99,7 +101,8 @@ Algoritmo
 	AbrirE/(clientes) ; AbrirE/(novedades) ; AbrirE/(paquetesTuristicos) ; Abrir/S(actClientes)
 	LeerMae() ; LeerMov()
 
-	Mientras (nv.clave <> HV) o (cl.nroCliente <> HV) hacer
+	//majo dijo que hay que comparar clave no importa si tiene mas de una clave, no son tan especificos con eso
+	Mientras (nv.clave <> HV) o (cl.clave <> HV) hacer
 		Si cl.nroCliente < nv.clave.nroCliente entonces
 			// sal := mae
 			//campo por campo, salida igual a maestro
@@ -108,6 +111,9 @@ Algoritmo
 			LeerMae()
 		Sino
 			Si cl.nroCliente = nv.clave.nroCliente
+				
+					Si nv.nroNovedad < 999 y nv.nroNovedad > 0
+				fd
 				Si nv.nroNovedad = 0 entonces
 					Porcentaje()
 					actCl.estado:= "DEUDOR"
@@ -132,38 +138,40 @@ Algoritmo
 						cantidadBaja:= cantidadBaja + 1
 						montoReintegrar:= montoReintegrar + nv.monto
 					Sino
-						//entre 1...998
-						Porcentaje()
-						Segun cl.categoria hacer
-							"PLATA": saldo:= cl.saldo - ((nv.nroNovedad * 0,10) +nv.nroNovedad)
-							actClientes.puntos:= 10
-							"ORO": saldo:= cl.saldo - ((nv.nroNovedad * 0,15) + nv.nroNovedad)
-							actClientes.puntos:= 20
-							"DIAMANTE": saldo:= cl.saldo - ((nv.nroNovedad * 0,20) + nv.nroNovedad)
-							actClientes.puntos:= 30
-						Fs
-
-						Si ( saldo = 0 ) entonces
-							actCl.saldo:= 0
-							actCl.estado:= "SALDADO"
-						Sino
-
-							Si saldo < 0 entonces
-								actCl.saldo:= 0
-								actCl.estado:= "A FAVOR"
-								montoReintegrar:= montoReintegrar + saldo
-							Sino
-							// > 0
-								actCl.saldo:= SALDO
-								actCl.saldo:= "DEUDOR"
+						Mientras actCl.clave = cl.clave hacer
+							//entre 1...998
+							Porcentaje()
+							Segun cl.categoria hacer
+								"PLATA": saldo:= cl.saldo - ((nv.nroNovedad * 0,10) +nv.nroNovedad)
+								actClientes.puntos:= 10
+								"ORO": saldo:= cl.saldo - ((nv.nroNovedad * 0,15) + nv.nroNovedad)
+								actClientes.puntos:= 20
+								"DIAMANTE": saldo:= cl.saldo - ((nv.nroNovedad * 0,20) + nv.nroNovedad)
+								actClientes.puntos:= 30
 							Fs
-						Fs
 
-						actCl.nroCliente:= nv.nroCliente
-						actCl.apellidoNombre:= nv.apellidoNombre
-						actCl.dni:= nv.dni
-						actCl.idPaquete:= nv.idPaquete
-						actCl.fechaBaja:= cl.fechaNovedad
+							Si ( saldo = 0 ) entonces
+								actCl.saldo:= 0
+								actCl.estado:= "SALDADO"
+							Sino
+
+								Si saldo < 0 entonces
+									actCl.saldo:= 0
+									actCl.estado:= "A FAVOR"
+									montoReintegrar:= montoReintegrar + saldo
+								Sino
+								// > 0
+									actCl.saldo:= SALDO
+									actCl.saldo:= "DEUDOR"
+								Fs
+							Fs
+
+							actCl.nroCliente:= nv.nroCliente
+							actCl.apellidoNombre:= nv.apellidoNombre
+							actCl.dni:= nv.dni
+							actCl.idPaquete:= nv.idPaquete
+							actCl.fechaBaja:= cl.fechaNovedad
+						Fm
 					Fs
 				Fs
 				LeerMov() ; LeerMae()
