@@ -179,10 +179,13 @@ Algoritmo
 				// mae>mov
 				// alta a nuevo cliente
 				// sal := mov
-				//salida igual al movimiento, salida = novedades campo por campo.
+				// salida igual al movimiento, salida = novedades campo por campo.
 
 				simple:= simple + 1 //los nuevos clientes son categoria simple
 				actClientes:= nv
+
+				//AGREGAR mientras nv = actCl guardo modificaciones, PUNTOS PAGOS SE ACTUALIZA
+				//Leo movimiento dentro de ese ciclo tmb
 				LeerMov()
 			fs
 		fs
