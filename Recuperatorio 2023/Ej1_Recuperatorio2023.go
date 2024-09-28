@@ -94,6 +94,75 @@ Ambiente
 		fs
 	fp
 
+	Procedimiento Modificar() es
+		//AGREGAR mientras nv = actCl guardo modificaciones, PUNTOS PAGOS SE ACTUALIZA
+		//Leo movimiento dentro de ese ciclo tmb
+		Mientras actCl.clave.nroCliente = nv.clave.nroCliente hacer
+			
+			Si nv.nroNovedad = 0 entonces
+				Porcentaje()
+				actCl.estado:= "DEUDOR"
+				actCl.saldo:= saldo
+				actCl.puntos:= 0
+				actCl.nroCliente:= nv.nroCliente
+				actCl.apellidoNombre:= nv.apellidoNombre
+				actCl.dni:= nv.dni
+				actCl.idPaquete:= nv.idPaquete
+				
+			Sino
+				Si nv.nroNovedad = 999 entonces //baja
+					//actualizo salida
+					actCl.nroCliente:= nv.nroCliente
+					actCl.apellidoNombre:= nv.apellidoNombre
+					actCl.dni:= nv.dni
+					actCl.idPaquete:= nv.idPaquete
+					actCl.estado:= "SALDO A FAVOR"
+					actCl.saldo:= saldo
+					actCl.fechaBaja:= cl.fechaNovedad
+					actCl.puntos:= cl.puntos
+					//act A
+					cantidadBaja:= cantidadBaja + 1
+					montoReintegrar:= montoReintegrar + nv.monto
+				Sino
+					Mientras actCl.clave = cl. hacer
+						//entre 1...998
+						Porcentaje()
+						Segun cl.categoria hacer
+							"PLATA": saldo:= cl.saldo - ((nv.nroNovedad * 0,10) +nv.nroNovedad)
+							actClientes.puntos:= 10
+							"ORO": saldo:= cl.saldo - ((nv.nroNovedad * 0,15) + nv.nroNovedad)
+							actClientes.puntos:= 20
+							"DIAMANTE": saldo:= cl.saldo - ((nv.nroNovedad * 0,20) + nv.nroNovedad)
+							actClientes.puntos:= 30
+						Fs
+
+						Si ( saldo = 0 ) entonces
+							actCl.saldo:= 0
+							actCl.estado:= "SALDADO"
+						Sino
+
+							Si saldo < 0 entonces
+								actCl.saldo:= 0
+								actCl.estado:= "A FAVOR"
+								montoReintegrar:= montoReintegrar + saldo
+							Sino
+							// > 0
+								actCl.saldo:= SALDO
+								actCl.saldo:= "DEUDOR"
+							Fs
+						Fs
+
+						actCl.nroCliente:= nv.nroCliente
+						actCl.apellidoNombre:= nv.apellidoNombre
+						actCl.dni:= nv.dni
+						actCl.idPaquete:= nv.idPaquete
+					Fm
+				Fs
+			Fs
+			LeerMov()
+		fm
+	fp
+
 	
 
 Algoritmo
@@ -111,69 +180,37 @@ Algoritmo
 			LeerMae()
 		Sino
 			Si cl.nroCliente = nv.clave.nroCliente
-				
-					Si nv.nroNovedad < 999 y nv.nroNovedad > 0
-				fd
-				Si nv.nroNovedad = 0 entonces
-					Porcentaje()
-					actCl.estado:= "DEUDOR"
-					actCl.saldo:= cl.saldo
-					actCl.puntos:= 0
-					actCl.nroCliente:= nv.nroCliente
-					actCl.apellidoNombre:= nv.apellidoNombre
-					actCl.dni:= nv.dni
-					actCl.idPaquete:= nv.idPaquete
-				Sino
-					Si nv.nroNovedad = 999 entonces
-						//actualizo salida
+				Mientras cl.nroCliente=nv.clave.nroCliente hacer //este no se si va
+					Si nv.nroNovedad = 0 entonces
+						Porcentaje()
+						actCl.estado:= "DEUDOR"
+						actCl.saldo:= cl.saldo
+						actCl.puntos:= 0
 						actCl.nroCliente:= nv.nroCliente
 						actCl.apellidoNombre:= nv.apellidoNombre
 						actCl.dni:= nv.dni
 						actCl.idPaquete:= nv.idPaquete
-						actCl.estado:= "SALDO A FAVOR"
-						actCl.saldo:= cl.saldo
-						actCl.fechaBaja:= cl.fechaNovedad
-						actCl.puntos:= cl.puntos
-						//act A
-						cantidadBaja:= cantidadBaja + 1
-						montoReintegrar:= montoReintegrar + nv.monto
+						
 					Sino
-						Mientras actCl.clave = cl.clave hacer
-							//entre 1...998
-							Porcentaje()
-							Segun cl.categoria hacer
-								"PLATA": saldo:= cl.saldo - ((nv.nroNovedad * 0,10) +nv.nroNovedad)
-								actClientes.puntos:= 10
-								"ORO": saldo:= cl.saldo - ((nv.nroNovedad * 0,15) + nv.nroNovedad)
-								actClientes.puntos:= 20
-								"DIAMANTE": saldo:= cl.saldo - ((nv.nroNovedad * 0,20) + nv.nroNovedad)
-								actClientes.puntos:= 30
-							Fs
-
-							Si ( saldo = 0 ) entonces
-								actCl.saldo:= 0
-								actCl.estado:= "SALDADO"
-							Sino
-
-								Si saldo < 0 entonces
-									actCl.saldo:= 0
-									actCl.estado:= "A FAVOR"
-									montoReintegrar:= montoReintegrar + saldo
-								Sino
-								// > 0
-									actCl.saldo:= SALDO
-									actCl.saldo:= "DEUDOR"
-								Fs
-							Fs
-
+						Si nv.nroNovedad = 999 entonces //baja
+							//actualizo salida
 							actCl.nroCliente:= nv.nroCliente
 							actCl.apellidoNombre:= nv.apellidoNombre
 							actCl.dni:= nv.dni
 							actCl.idPaquete:= nv.idPaquete
+							actCl.estado:= "SALDO A FAVOR"
+							actCl.saldo:= cl.saldo
 							actCl.fechaBaja:= cl.fechaNovedad
-						Fm
-					Fs
-				Fs
+							actCl.puntos:= cl.puntos
+							//act A
+							cantidadBaja:= cantidadBaja + 1
+							montoReintegrar:= montoReintegrar + nv.monto
+						Sino
+							//entre 998 y 0
+							actCl.saldo:= cl.saldo
+							Modificar()
+						Fs
+				Fm
 				LeerMov() ; LeerMae()
 			Sino
 				// mae>mov
@@ -184,9 +221,10 @@ Algoritmo
 				simple:= simple + 1 //los nuevos clientes son categoria simple
 				actClientes:= nv
 
-				//AGREGAR mientras nv = actCl guardo modificaciones, PUNTOS PAGOS SE ACTUALIZA
-				//Leo movimiento dentro de ese ciclo tmb
+				
 				LeerMov()
+				Modificar()
+				
 			fs
 		fs
 
