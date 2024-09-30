@@ -118,18 +118,10 @@ Algoritmo
 	cantidadBaja:= 0 ; montoReintegrar:= 0
 	simple:= 0 ; plata:= 0 ; oro:= 0 ; diamante:= 0
 	
-	Mientras (mae.clave <> HV) Y (mov.clave.nroCliente <> HV) hacer
+	Mientras (mae.clave <> HV) O (mov.clave.nroCliente <> HV) hacer
 		Si mae.clave < mov.clave.nroCliente entonces
 			//auxiliar := maestro
-			aux.nroCliente:= mae.nroCliente
-			aux.apellidoNombre:= mae.apellidoNombre
-			aux.dni:=mae.dni
-			aux.idPaquete:=mae.idPaquete
-			aux.saldo:= mae.saldo
-			aux.estado:= mae.estado
-			aux.categoria:= mae.categoria
-			aux.puntos:= mae.puntos
-			aux.fechaBaja:= mae.fechaBaja
+			aux:= mae
 			Porcentaje(mae.categoria)
 			LeerMae()
 			//pongo lo mismo que el maestro pq no hay movimiento para este id
