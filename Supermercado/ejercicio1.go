@@ -109,6 +109,7 @@ Algoritmo
 							aux.stock:= mov.cantidad
 						fs
 					fs
+					LeerMov()
 				fs
 			fs
 		fs
