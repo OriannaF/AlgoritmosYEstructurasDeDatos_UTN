@@ -109,14 +109,14 @@ Algoritmo
 							prod.productoId:= mov.clave
 							Leer(archProd,prod)
 							Si EXISTE entonces	
-								Esc("Error, falta stock para" prod.nombre " de " mov.cantidad " unidades.")
+								Esc("Error, falta stock para" prod.nombre " de " aux.stock - mov.cantidad " unidades.")
 							sino
 								Esc(Error, producto no encontrado)
 							fs
 						sino
 							Si mov.tipo = "D" entonces
-								aux.productoId:= mov.productoId
-								aux.stock:= mov.cantidad
+								aux.productoId:= aux.productoId + mov.productoId
+								aux.stock:=  aux.stock + mov.cantidad
 							fs
 						fs
 						LeerMov()
