@@ -94,8 +94,11 @@ Algoritmo
 
 					Si mov.tipo = "D" hacer
 						aux.stock:=  aux.stock + mov.cantidad
-						domicilio:= domicilio + 1 
 						LeerMae() ; LeerMov()
+					fs
+
+					Si mov.tipoEnvio entonces
+						domicilio:= domicilio + 1 
 					fs
 				fm
 
