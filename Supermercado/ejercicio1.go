@@ -128,7 +128,6 @@ Algoritmo
 						fs
 						LeerMov()
 					fm
-					LeerMov()
 				fs
 			fs
 		fs
