@@ -49,7 +49,7 @@ Ambiente
 	fp
 
 Algoritmo
-	AbrirE/(archMov) ; Abrir/S(archProd)
+	AbrirE/(archMov) ; AbrirE/(archProd)
 	Para i=1 hasta 6 hacer
 		Para j=1 hasta 3 hacer
 			A(i,j):= 0
