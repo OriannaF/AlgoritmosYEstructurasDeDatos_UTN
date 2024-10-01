@@ -71,27 +71,31 @@ Algoritmo
 		sino
 			Si mae.clave=mov.clave entonces
 				//hay actualizacion para el prod
-				Mientras mov.tipo="C" hacer
-					Si mae.stock >= mov.cantidad entonces
-						aux.stock:= mae.stock - mov.cantidad
-					sino
-						prod.productoId:= mae.clave
-						Leer(archProd,prod)
-						Si EXISTE entonces	
-							Esc("Error, falta stock para" prod.nombre " de " mae.stock - mov.cantidad " unidades.")
+				Mientras mae.clave=mov.clave hacer
+					Si mov.tipo="C" hacer
+						Si mae.stock >= mov.cantidad entonces
+							aux.stock:= mae.stock - mov.cantidad
 						sino
-							Esc(Error, producto no encontrado)
+							prod.productoId:= mae.clave
+							Leer(archProd,prod)
+							Si EXISTE entonces	
+								Esc("Error, falta stock para" prod.nombre " de " mae.stock - mov.cantidad " unidades.")
+							sino
+								Esc(Error, producto no encontrado)
+							fs
+
 						fs
-
+						LeerMae() ; LeerMov()
 					fs
-					LeerMae() ; LeerMov()
+
+					Si mov.tipo = "D" hacer
+						aux.stock:= mae.stock + mov.cantidad
+						domicilio:= domicilio + 1 
+						LeerMae() ; LeerMov()
+					fs
 				fm
 
-				Mientras mov.tipo = "D" hacer
-					aux.stock:= mae.stock + mov.cantidad
-					domicilio:= domicilio + 1 
-					LeerMae() ; LeerMov()
-				fm
+				
 				
 			sino
 				Si mae.clave>mov.clave entonces
