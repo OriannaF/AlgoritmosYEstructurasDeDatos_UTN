@@ -71,15 +71,19 @@ Algoritmo
 		sino
 			Si mae.clave=mov.clave entonces
 				//hay actualizacion para el prod
-				Mientras mae.clave=mov.clave hacer
+				
+					aux:=mae
+				
+
+				Mientras aux.clave = mov.clave hacer
 					Si mov.tipo="C" hacer
-						Si mae.stock >= mov.cantidad entonces
-							aux.stock:= mae.stock - mov.cantidad
+						Si aux.stock >= mov.cantidad entonces
+							aux.stock:= aux.stock - mov.cantidad
 						sino
-							prod.productoId:= mae.clave
+							prod.productoId:= aux.clave
 							Leer(archProd,prod)
 							Si EXISTE entonces	
-								Esc("Error, falta stock para" prod.nombre " de " mae.stock - mov.cantidad " unidades.")
+								Esc("Error, falta stock para" prod.nombre " de " aux.stock - mov.cantidad " unidades.")
 							sino
 								Esc(Error, producto no encontrado)
 							fs
@@ -89,7 +93,7 @@ Algoritmo
 					fs
 
 					Si mov.tipo = "D" hacer
-						aux.stock:= mae.stock + mov.cantidad
+						aux.stock:=  aux.stock + mov.cantidad
 						domicilio:= domicilio + 1 
 						LeerMae() ; LeerMov()
 					fs
@@ -99,20 +103,24 @@ Algoritmo
 				
 			sino
 				Si mae.clave>mov.clave entonces
-					Si mov.tipo = "C" entonces
-						prod.productoId:= mov.clave
-						Leer(archProd,prod)
-						Si EXISTE entonces	
-							Esc("Error, falta stock para" prod.nombre " de " mov.cantidad " unidades.")
+					aux:=mov //tiene otro formato debe ser registro por registro
+					Mientras aux.clave = mov.clave entonces
+						Si mov.tipo = "C" entonces
+							prod.productoId:= mov.clave
+							Leer(archProd,prod)
+							Si EXISTE entonces	
+								Esc("Error, falta stock para" prod.nombre " de " mov.cantidad " unidades.")
+							sino
+								Esc(Error, producto no encontrado)
+							fs
 						sino
-							Esc(Error, producto no encontrado)
+							Si mov.tipo = "D" entonces
+								aux.productoId:= mov.productoId
+								aux.stock:= mov.cantidad
+							fs
 						fs
-					sino
-						Si mov.tipo = "D" entonces
-							aux.productoId:= mov.productoId
-							aux.stock:= mov.cantidad
-						fs
-					fs
+						LeerMov()
+					fm
 					LeerMov()
 				fs
 			fs
