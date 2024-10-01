@@ -122,6 +122,10 @@ Algoritmo
 								aux.stock:=  aux.stock + mov.cantidad
 							fs
 						fs
+
+						Si mov.tipoEnvio = "DOMICILIO" entonces
+							domicilio:= domicilio + 1 
+						fs
 						LeerMov()
 					fm
 					LeerMov()
