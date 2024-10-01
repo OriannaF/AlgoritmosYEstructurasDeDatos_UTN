@@ -89,7 +89,11 @@ Algoritmo
 
 	Esc("Para el rubro ", rubroMayor, "de envio",envioMayor,"se tuvo el mayor monto")
 
-	Esc("Se tuvo ", A(6;2)," devoluciones")
+	Para i=1 hasta 5 hacer
+		Esc("Para el rubro ", i ,"Se tuvo ", A(i;3)," devoluciones")
+	Fp
+
+
 
 
 fa
