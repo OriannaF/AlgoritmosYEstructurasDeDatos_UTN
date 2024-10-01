@@ -61,10 +61,12 @@ Algoritmo
 		tipo(paq.rubro)
 		forma(mov.tipo)
 		Leer(archProd,prod)
+		i:= rubro
+		j:= forma
 		Si EXISTE entonces
-			A(rubro,forma):= A(rubro,forma) + mov.total
-			A(rubro,3):= A(rubro,3) + mov.total
-			A(6,forma):= A(6,forma) + mov.total
+			A(i,j):= A(i,j) + mov.total
+			A(i,3):= A(i,3) + mov.total
+			A(6,j):= A(6,j) + mov.total
 			A(6,3):= A(6,3) + mov.total
 		fs
 
