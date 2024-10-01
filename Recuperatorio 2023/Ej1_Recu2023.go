@@ -122,6 +122,7 @@ Algoritmo
 		Si mae.clave < mov.clave.nroCliente entonces
 			//auxiliar := maestro
 			aux:= mae
+			Grabar(archAux,aux)
 			Porcentaje(mae.categoria)
 			LeerMae()
 			//pongo lo mismo que el maestro pq no hay movimiento para este id
@@ -131,27 +132,7 @@ Algoritmo
 				Porcentaje(mae.categoria)
 				Si mov.nroNovedad = 0 entonces //ALTA
 					//aux:= mov
-					
-					//SALDO
-					//le pongo el costo de su paquete en el saldo
-					//en las altas me fijo de tener el costo de su paquete, si no se encuentra no guardo en el auxiliar, ya que seria una perdida para la empresa si se guarda el cliente sin saber el monto de su compra.
-
-					paq.idPaquete:= mov.idPaquete
-					Leer(archPaquetes,paq)
-					Si EXISTE entonces
-						aux.saldo:= paq.costo
-						aux.nroCliente:= mov.nroCliente
-						aux.apellidoNombre:= mov.apellidoNombre
-						aux.dni:=mov.dni
-						aux.idPaquete:=mov.idPaquete
-						aux.estado:= "DEUDOR"
-						aux.categoria:= "SIMPLE"
-						aux.puntos:= 0
-						aux.fechaBaja:= 0
-					Sino
-						Esc("Error, ID paquete no encontrado")
-					Fs
-
+					Esc("Error, alta invalida, el cliente ya existe")
 				Sino
 					Si mov.nroNovedad = 999 //BAJA
 						aux.nroCliente:= mov.nroCliente
@@ -189,25 +170,24 @@ Algoritmo
 			Sino
 				Si mae.clave > mov.clave.nroCliente entonces
 					//alta
+					Si mov.clave.nroNovedad = 0 entonces
+						//busco costo en archivo indexado
+						paq.idPaquete:= mov.idPaquete
+						Leer(archPaquetes,paq)
+						Si EXISTE entonces //aux:=mov
+							aux.saldo:= paq.costo
+							actCl.estado:= "DEUDOR"
+							actCl.puntos:= 0
+							actCl.nroCliente:= mov.nroCliente
+							actCl.apellidoNombre:= mov.apellidoNombre
+							actCl.dni:= mov.dni
+							actCl.idPaquete:= mov.idPaquete
+							simple:= simple + 1
 
-					//busco costo en archivo indexado
-					paq.idPaquete:= mov.idPaquete
-					Leer(archPaquetes,paq)
-					Si EXISTE entonces //aux:=mov
-						aux.saldo:= paq.costo
-						actCl.estado:= "DEUDOR"
-						actCl.puntos:= 0
-						actCl.nroCliente:= mov.nroCliente
-						actCl.apellidoNombre:= mov.apellidoNombre
-						actCl.dni:= mov.dni
-						actCl.idPaquete:= mov.idPaquete
-
-						simple:= simple + 1
-
-					Sino // no guardo el alta ya que no encuentra el costo
-						Esc("Error, ID Paquete no encontrado")
+						Sino // no guardo el alta ya que no encuentra el costo
+							Esc("Error, ID Paquete no encontrado")
+						Fs
 					Fs
-					
 					LeerMov()
 				Fs
 			Fs
