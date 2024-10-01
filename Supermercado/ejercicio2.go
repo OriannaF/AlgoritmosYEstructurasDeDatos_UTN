@@ -44,7 +44,7 @@ Ambiente
 	Funcion forma(x:alfanumerico): entero es
 		Segun x hacer
 			"C": forma:= 1
-			"D": rubro:= 2
+			"D": forma:= 2
 		fs
 	fp
 
