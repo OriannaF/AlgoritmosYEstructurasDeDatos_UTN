@@ -62,10 +62,14 @@ Algoritmo
 		forma(mov.tipo)
 		Leer(archProd,prod)
 		Si EXISTE entonces
-			A(rubro,forma):= A(rubro,forma) + mov.cantidad
-			A(rubro,3):= A(rubro,3) + mov.cantidad
-			A(6,forma):= A(6,forma) + mov.cantidad
-			A(6,3):= A(6,3) + mov.cantidad
+			A(rubro,forma):= A(rubro,forma) + mov.total
+			A(rubro,3):= A(rubro,3) + mov.total
+			A(6,forma):= A(6,forma) + mov.total
+			A(6,3):= A(6,3) + mov.total
+		fs
+
+		Si forma = 2 entonces
+			devolucion:= devolucion + 1
 		fs
 	fm
 
@@ -81,11 +85,12 @@ Algoritmo
 			Si A(i,j) > mayor entonces
 				rubroMayor:= i
 				envioMayor:= j
-				
 			fs
 
 		fp
 	fp
+
+
 
 	Esc("Para el rubro ", rubroMayor, "de envio",envioMayor,"se tuvo el mayor monto")
 

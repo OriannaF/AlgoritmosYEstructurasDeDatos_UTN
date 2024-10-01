@@ -71,10 +71,8 @@ Algoritmo
 		sino
 			Si mae.clave=mov.clave entonces
 				//hay actualizacion para el prod
+				aux:=mae
 				
-					aux:=mae
-				
-
 				Mientras aux.clave = mov.clave hacer
 					Si mov.tipo="C" hacer
 						Si aux.stock >= mov.cantidad entonces
@@ -107,6 +105,7 @@ Algoritmo
 			sino
 				Si mae.clave>mov.clave entonces
 					aux:=mov //tiene otro formato debe ser registro por registro
+
 					Mientras aux.clave = mov.clave entonces
 						Si mov.tipo = "C" entonces
 							prod.productoId:= mov.clave
