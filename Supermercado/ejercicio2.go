@@ -33,11 +33,11 @@ Ambiente
 
 	Funcion tipo(x:alfanumerico): entero es
 		Segun x hacer
-			"LIMPIEZA": rubro:= 1
-			"CARNICERIA": rubro:= 2
-			"VERDULERIA": rubro:= 3
-			"BAZAR": rubro:= 4
-			"PANADERIA": rubro:= 5
+			"LIMPIEZA": tipo:= 1
+			"CARNICERIA": tipo:= 2
+			"VERDULERIA": tipo:= 3
+			"BAZAR": tipo:= 4
+			"PANADERIA": tipo:= 5
 		fs
 	fp
 
