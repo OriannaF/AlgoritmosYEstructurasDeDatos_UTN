@@ -140,6 +140,7 @@ Algoritmo
 		Si mae.clave<mov.clave entonces
 			//sal:= mae
 			sal:=mae
+			Grabar(archSal,sal)
 			LeerMae()
 		sino
 			si mae.clave=mov.clave entonces
@@ -151,6 +152,7 @@ Algoritmo
 					modificarAuxiliar()
 					LeerMov()
 				fm
+				Grabar(archSal,sal)
 				LeerMae()
 			sino
 				si mae.clave>mov.clave entonces
@@ -168,6 +170,7 @@ Algoritmo
 						modificarAuxiliar()
 						LeerMov()
 					fm
+					Grabar(archSal,sal)
 				fs
 			fs
 		fs
