@@ -97,7 +97,7 @@ Algoritmo
 						LeerMae() ; LeerMov()
 					fs
 
-					Si mov.tipoEnvio entonces
+					Si mov.tipoEnvio = "DOMICILIO" entonces
 						domicilio:= domicilio + 1 
 					fs
 				fm
