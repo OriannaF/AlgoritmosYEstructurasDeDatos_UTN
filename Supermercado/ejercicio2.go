@@ -29,7 +29,7 @@ Ambiente
 	prod: productos
 
 	a: arreglo de (1...6,1..3) de entero // i = rubro , j= envio
-	i,j,rubro,forma: entero
+	i,j,rubro,forma,rubroMayor,envioMayor: entero
 
 	Funcion tipo(x:alfanumerico): entero es
 		Segun x hacer
@@ -87,9 +87,9 @@ Algoritmo
 		fp
 	fp
 
-	Esc("Para el rubro ", i, "de envio",j,"se tuvo el mayor monto")
+	Esc("Para el rubro ", rubroMayor, "de envio",envioMayor,"se tuvo el mayor monto")
 
-	Esc("Se tuvo ", A(6;2)" devoluciones")
+	Esc("Se tuvo ", A(6;2)," devoluciones")
 
 
 fa
