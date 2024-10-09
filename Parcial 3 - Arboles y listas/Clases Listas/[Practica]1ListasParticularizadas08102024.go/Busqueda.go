@@ -1,3 +1,12 @@
+//listas lineales
+//en algún lugar tenemos almacenado prim por eso se pone acá  
+//PRIM es un puntero externo, está almacenado en memoria interna
+//los demás punteros son internos (los que se definen dentro del nodo)
+//en listas simplemente enlazadas, todos los punteros internos sirven para apuntar al próximo elemento.
+// p, q y eso son punteros externos
+//en listas doblemente enlazadas, uno apunta al siguiente elemento y otro al anterior
+
+
 Acción ejListas(PRIM: puntero a nodo) es
 Ambiente
 	NODO = registro
