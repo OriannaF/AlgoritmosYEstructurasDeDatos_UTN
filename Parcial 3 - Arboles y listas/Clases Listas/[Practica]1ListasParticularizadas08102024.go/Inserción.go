@@ -29,6 +29,7 @@ MIENTRAS (valor <> '*') HACER
 FIN MIENTRAS
 
 //Carga ordenada
+
 Prim:= nil
 A:= nil;
 
