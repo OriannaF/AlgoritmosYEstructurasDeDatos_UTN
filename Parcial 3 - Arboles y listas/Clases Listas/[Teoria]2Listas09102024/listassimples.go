@@ -1,3 +1,5 @@
+//codigo de gonza
+
 Accion listas_simples (prim: puntero a nodo) es 
  Ambiente 
  nodo = registro 
@@ -42,7 +44,7 @@ Accion listas_simples (prim: puntero a nodo) es
 			 *q.prox:= p  //aca insertamos "q" haciendo que el proximo de "ant" apunte a "q" y el proximo de "q" apunte a "p"
 			FinSi
 		FP
-	 Procedimiento insertar_elemento() es 
+	 Procedimiento insertar_elemento() es  //carga ordenada
 	 	 Nuevo(q)
 		 *q.dato:= valor 
 		 	Si prim = nil entonces  //si la lista esta vacia entonces prim apunta a "q" y el proximo de "q" apunta a nil
