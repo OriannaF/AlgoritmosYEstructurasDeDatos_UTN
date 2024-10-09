@@ -1,7 +1,7 @@
 //Apilar
 Leer(valor)
 Prim:= nil
-Mientras (valor <> "*") hacer
+Mientras (valor <> "*") hacer // * es el tope
 	Nuevo(p) //p va a puntar al elemento nuevo cuando se crea
 	*p.dato:= valor //al dato del nuevo nodo se le agrega lo que ingreso el usuario
 	*p.prox:= Prim //apunta p a donde estaba anteriormente prim, o sea al elemento siguiente
