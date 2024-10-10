@@ -1,8 +1,14 @@
-hola
+# Guía de práctica
 
-Apuntes de teoría:
+https://aed-frre.github.io/
 
-teoría parcial 3 (Arboles y Listas): https://frreutn-my.sharepoint.com/:w:/g/personal/oriannafernandezdelrosario_ca_frre_utn_edu_ar/EeckKCxF54tMqDUyDTuQQDoBhrgcuFIGQgNAVycg1hInnA?e=drXHRa
+# Apuntes de Teoría
 
-teoría parcial 2 (Actualizacion y procesos estadisticos): https://frreutn-my.sharepoint.com/:b:/g/personal/oriannafernandezdelrosario_ca_frre_utn_edu_ar/EZd3j2oUxh1BhqHBvpk0J70BiJZ8sJhd35i3gt5RQNMruQ?e=ldaLhd
-![descarga](https://github.com/user-attachments/assets/5cdb4b72-2cbd-42a0-a075-ec96aa309452)
+## Parcial 3: Árboles y Listas
+[Teoría Parcial 3](https://frreutn-my.sharepoint.com/:w:/g/personal/oriannafernandezdelrosario_ca_frre_utn_edu_ar/EeckKCxF54tMqDUyDTuQQDoBhrgcuFIGQgNAVycg1hInnA?e=drXHRa)
+
+## Parcial 2: Actualización y Procesos Estadísticos
+[Teoría Parcial 2](https://frreutn-my.sharepoint.com/:b:/g/personal/oriannafernandezdelrosario_ca_frre_utn_edu_ar/EZd3j2oUxh1BhqHBvpk0J70BiJZ8sJhd35i3gt5RQNMruQ?e=ldaLhd)
+
+
+![37ef5e87b233ba0d8a452f5593208df0](https://github.com/user-attachments/assets/4696cbda-2fce-4653-bf39-c4d2340964c4)
