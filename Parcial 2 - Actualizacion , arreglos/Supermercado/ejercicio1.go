@@ -85,22 +85,21 @@ Algoritmo
 							sino
 								Esc(Error, producto no encontrado)
 							fs
-
+								
 						fs
-						LeerMae() ; LeerMov()
 					fs
 
 					Si mov.tipo = "D" hacer
 						aux.stock:=  aux.stock + mov.cantidad
-						LeerMae() ; LeerMov()
 					fs
 
 					Si mov.tipoEnvio = "DOMICILIO" entonces
 						domicilio:= domicilio + 1 
 					fs
+						LeerMov()
 				fm
-
-				
+				Grabar(archAux,aux)
+				LeerMae()
 				
 			sino
 				Si mae.clave>mov.clave entonces

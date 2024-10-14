@@ -1,0 +1,60 @@
+Accion Centro_Bioquimico ES
+Ambiente
+    protocolo: secuencia de caracter
+    p: caracter
+    A,E,C,cantidadEstudios: entero ////// VER SI SE PONIA ENTERO ACA NO ME ACUERDO
+    codProtocolo: caracter
+
+    Procedimiento contarEstudio() ES
+        Segun p hacer
+            "A": A:= A + 1
+            "E": E:= E + 1 
+            "C": C:= C + 1  
+        Fs
+    FP
+
+    Procedimiento salidaE() ES
+        Esc(salida,"E")
+        Avz(protocolo,p)
+        Esc(salida,p)
+        Avz(protocolo,p)
+        Esc(salida,p)
+    FP
+
+    Procedimiento AvzTres() es
+        Para i:=1 hasta 3 hacer
+            Avz(protocolo,p)
+        Fp
+    Fp
+
+Algoritmo
+
+    ARR(protocolo,p) ; AVZ(protocolo,p)
+    CREAR(salida) ; A:= 0 ; E:= 0 ; C:= 0
+
+    Repetir
+        codProtocolo:= p
+
+        Repetir 
+            Avz(protocolo,p)
+        Hasta p = ","
+        
+        Avz(protocolo,p)  //primer digito estudio
+        cantidadEstudios := carEntero(p) *10
+        Avz(protocolo,p) //segundo digito estudio
+        cantidadEstudios := cantidadEstudios + carEntero(p) 
+
+        Para i=1 hasta cantidadEstudios hacer
+            Avz(protocolo,p)
+            contarEstudio()
+            Si codProtocolo= "A" Y p= "E" entonces
+                salidaE()
+                Sino
+                AvzTres()
+            Fs
+        Fp
+
+    Hasta p = "*"
+
+    Esc("El porcentaje de pruebas tipo A sobre el total es de: ", (A/A+E+C)*100)
+Fa

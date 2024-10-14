@@ -1,0 +1,675 @@
+En actualizacion existen 2 procesos que se pueden realizar el ciclo incluyente y el excluyente 
+pero el que mas usamos en actualizacion es el incluyente, entonces deberiamos crear procedimientos
+para poder asi leer el registro pero no de la forma que veniamos haciendo de leer(arch,reg) sino 
+procedimiento leer_maestro() es 
+    leer(arch_maestro,reg) -------> en este caso lo usamos para poder avanzar al siguiente registro y corroborar si llego al fin o no 
+    si FDA(arch_maestro) entonces  ----> aca ya ponemos la condicion de que si llego al fin del archivo hacemos lo siguiente 
+        reg_maestro.clave := HW ------> Le asigno HW que es el valor mas alto que se da para poder terminar el ciclo en el proceso 
+    finsi 
+Finprocedimiento 
+
+Entonces en este caso trabajaremos con un maestro y con un movimiento y por eso tenemos que crear dos procedimiento para cada uno 
+procedimiento leer_maestro() es 
+    leer(arch_maestro,reg_maestro) 
+    si FDA(arch_maestro) entonces  
+        reg_maestro.clave := HW 
+    finsi 
+Finprocedimiento
+Procedimiento leer_moviento() es 
+    leer(arch_movimiento,reg_movimento)
+    si FDA(arch_movimiento) entonces 
+        reg_movimiento.clave := HW
+    finsi 
+Finprocedimiento
+*****ESTO DOS PROCEDIMIENTO SIEMPRE SE HACEN EN EL AMBIENTE EHEHE****** entonces un ejemplo de como actualizar cada uno 
+***En cod_mov que puede venir un A: que es un alta del registro, una B: que es baja del registro, una D: que es una modificacion del registro****
+***Tambien tengan en cuenta que no siempre viene A B D, sino tambien valores como 1 2 3 o 001 000****
+Accion ejemplo es 
+Ambiente 
+    maestro = registro 
+        clave: formato_clave 
+        campo1: N(8)
+        .......
+        campoN: N(8)
+    Finregistro 
+    movimiento = registro 
+        claveD: formato_clave 
+            campo1: N(8)
+            .....
+            campoN: 
+            Cod_mov: AN(1)
+    Finregistro
+    arch_maestro, arch_maestro_actualizado: archivo de maestro ordenado por clave 
+    reg_maestro, reg_actualizado: maestro 
+    arch_movimiento: archivo de movimiento ordenado por clave 
+    reg_movimiento: movimiento 
+//Tambien siempre se crea un arch_maestro_actualizado porque piden que actualice el maestro viejo
+//Por eso siempre va un arch_maestro_actualizado y reg_actualizado con el formato del maestro para actualizarlo pue 
+//definimos los procedimientos que antes les explique pue 
+procedimiento leer_maestro() es 
+    leer(arch_maestro,reg_maestro) 
+    si FDA(arch_maestro) entonces  
+        reg_maestro.clave := HW 
+    finsi 
+Finprocedimiento
+Procedimiento leer_movimiento() es 
+    leer(arch_movimiento,reg_movimento)
+    si FDA(arch_movimiento) entonces 
+        reg_movimiento.clave := HW
+    finsi 
+Finprocedimiento
+
+//fijense ahora los diferentes casos del cod_mov 
+procedimiento procesos_iguales() es; 
+    segun cod_mov hacer 
+        A: escribir("ERROR ALTA NO ES VALIDA ") //en los procesos iguales se considerar error, porque no se puede dar de alta un registro que ya existe 
+        M: //SE MODIFICAN LOS CAMPOS QUE PIDE LA COSIGNA Y GRABA 
+        B: //SE HACE LA BAJA CORRESPONDIENTE TANTO LOGICA O FISICA 
+    Finsegun 
+Finprocedimiento
+Procedimiento proceso_alta() es 
+    segun cod_mov hacer 
+        A: //Se le asigna campo a campo(si tienen formato distinto el movimiento y el maestro), y se graba 
+        M: escribir("ERROR NO SE PUEDE MODIFICAR") //se considera error porque no podes modificar un registro que no existe 
+        B: escribir("ERROR NO SE PUEDE UNA BAJA" ) // lo mismo que el modificar, no se puede dar de baja un registro que no existe 
+    Finsegun 
+Finprocedimiento
+
+Proceso 
+    ABRIR E/(arch_maestro); ABRIR E/(arch_movimiento); ABRIR /S(arch_maestro_actualizado)
+    leer_maestro(); leer_movimiento(); ****------> se leen siempre los procedimientos**** 
+
+    //El mientras de abajo, corrobora si alguno de los archivos llego a su fin 
+    //porque acuerdense los procedimientos le asignamos HW si llego al FDA 
+    //entonces si es HW sale del mientras y termina el proceso de actualizacion 
+    Mientras (reg_maestro.Clave <> HW) o (reg_movimento.claveD <> HW) hacer 
+        si reg_maestro.clave < reg_movimiento.claveD entonces // Se copia el maestro a la salida (maestro actualizado), se lo conoce como maestro sin movimiento 
+            reg_actualizado:= reg_maestro
+            GRABAR(arch_maestro_actualizado,reg_actualizado)
+            leer_maestro()
+        sino 
+            si reg_maestro.clave = reg_movimiento.ClaveD entonces //Se copia cualquiera de los dos, el movimiento o el maestro, pero se avanzan los dos con el procedimiento 
+                procesos_iguales() 
+                leer_maestro() 
+                leer_movimiento() 
+            sino 
+                proceso_alta() //en este caso se copia el movimiento al maestro actualizado 
+                leer_movimiento() 
+            fs
+        finsi 
+    Finmientras 
+    CERRAR(arch_maestro); CERRAR(arch_movimiento); CERRAR(arch_maestro_actualizado)
+Finproceso 
+
+//El ejemplo de aca arriba era solo Actualizacion unitaria, ahora vamos con uno Por lote 
+//En el de actualizacion por lote, se agrega un aux para el maestro porque se utiliza un mientras 
+//porque ese mientras nos va a permitir actualizar el registro hasta que la clave sea distinta al aux 
+Accion ejemplo es 
+Ambiente 
+    maestro = registro 
+        clave: formato_clave 
+        campo1: N(8)
+        .......
+        campoN: N(8)
+    Finregistro 
+    movimiento = registro 
+        claveD: formato_clave 
+            campo1: N(8)
+            .....
+            campoN: 
+            Cod_mov: AN(1)
+    Finregistro
+    arch_maestro, arch_maestro_actualizado: archivo de maestro ordenado por clave 
+    reg_maestro, reg_actualizado: maestro 
+    arch_movimiento: archivo de movimiento ordenado por clave 
+    reg_movimiento: movimiento 
+//Tambien siempre se crea un arch_maestro_actualizado porque piden que actualice el maestro viejo
+//Por eso siempre va un arch_maestro_actualizado y reg_actualizado con el formato del maestro para actualizarlo pue 
+//definimos los procedimientos que antes les explique pue 
+procedimiento leer_maestro() es 
+    leer(arch_maestro,reg_maestro) 
+    si FDA(arch_maestro) entonces  
+        reg_maestro.clave := HW 
+    finsi 
+Finprocedimiento
+Procedimiento leer_movimiento() es 
+    leer(arch_movimiento,reg_movimento)
+    si FDA(arch_movimiento) entonces 
+        reg_movimiento.clave := HW
+    finsi 
+Finprocedimiento
+
+//fijense ahora los diferentes casos del cod_mov 
+procedimiento actualizar() es; 
+    segun cod_mov hacer 
+        A: escribir("ERROR ALTA NO ES VALIDA ") //en este caso se considerar error, porque no se puede dar de alta un registro que ya existe 
+        M: //SE MODIFICAN LOS CAMPOS QUE PIDE LA COSIGNA 
+        B: //SE HACE LA BAJA CORRESPONDIENTE TANTO LOGICA O FISICA 
+    Finsegun 
+Finprocedimiento
+Procedimiento proceso_alta() es 
+    segun cod_mov hacer 
+        A: //Se le asigna campo a campo(si tienen formato distinto el movimiento y el maestro), y se graba 
+        M: escribir("ERROR NO SE PUEDE MODIFICAR") //se considera error porque no podes modificar un registro que no existe 
+        B: escribir("ERROR NO SE PUEDE UNA BAJA" ) // lo mismo que el modificar, no se puede dar de baja un registro que no existe 
+    Finsegun 
+Finprocedimiento
+
+Proceso 
+    ABRIR E/(arch_maestro); ABRIR E/(arch_movimiento); ABRIR /S(arch_maestro_actualizado)
+    leer_maestro(); leer_movimiento(); ****------> se leen siempre los procedimientos**** 
+
+    //El mientras de abajo, corrobora si alguno de los archivos llego a su fin 
+    //porque acuerdense los procedimientos le asignamos HW si llego al FDA 
+    //entonces si es HW sale del mientras y termina el proceso de actualizacion 
+    Mientras (reg_maestro.Clave <> HW) o (reg_movimento.claveD <> HW) hacer 
+        si reg_maestro.clave < reg_movimiento.claveD entonces // Se copia el maestro a la salida (maestro actualizado), se lo conoce como maestro sin movimiento 
+            reg_actualizado:= reg_maestro
+            GRABAR(arch_maestro_actualizado,reg_actualizado)
+            leer_maestro()
+        sino 
+            si reg_maestro.clave = reg_movimiento.ClaveD entonces //Se copia cualquiera de los dos, el movimiento o el maestro, pero se avanzan los dos con el procedimiento 
+                aux:=reg_maestro //asignamos nuestro aux los valores del maestro 
+                Mientras aux.clave = reg_movimiento.clave hacer //Hacemos este ciclo para poder actualizar todo lo que contega esa clave que tiene varios movimientos para un maestro 
+                    actualizar()  
+                    leer_movimiento() 
+                Finmientras 
+                reg_actualizado:= aux // una vez que sale del mientras, podemos hacer esto o directamente grabar con el aux 
+                GRABAR(arch_maestro_actualizado, reg_actualizado) o bien GRABAR(arch_maestro_actualizado, aux) 
+                leer_maestro() 
+            sino 
+                proceso_alta() //aca damos los valores al auxiliar de los del movimiento 
+                leer_movimiento() 
+                aux.clave:=reg_movimento.claveD //asignamos la clave del movimiento para poder realizar otra vez el ciclo del mientras y corrobar si tiene mas movimiento 
+                Mientras aux.clave = reg_movimento.claveD hacer 
+                    actualizar()  
+                    leer_movimiento() 
+                Finmientras 
+                reg_actualizado:= aux // una vez que sale del mientras, podemos hacer esto o directamente grabar con el aux 
+                GRABAR(arch_maestro_actualizado, reg_actualizado) o bien GRABAR(arch_maestro_actualizado, aux) 
+            finsi
+        finsi 
+    Finmientras 
+    CERRAR(arch_maestro); CERRAR(arch_movimiento); CERRAR(arch_maestro_actualizado)
+Finproceso 
+
+BUENO TENGAN EN CUENTA EL ENUNCIADO PARA PODER SABER SI ES UNITARIA O POR LOTE 
+PORQUE PUEDE DECIR QUE SE CONSIDERA QUE EXISTE UN MOVIMIENTO PARA REGISTRO DEL MAESTRO EN ESE CASO ES ACTUALIZACION UNITARIA 
+SI DICE QUE EXISTE MAS DE UN MOVIMIENTO POR CADA REGISTRO DEL MAESTRO ENTONCES ES UNA ACTUALIZACION POR LOTE 
+LA COSIGNA MISMA LES DICE PARA DONDE VAN 
+EJEMPLOS DE ACTUALIZACION UNITARIA Y POR LOTE: 
+
+Ejercicio 2.2.19¶ //ACTUALIZACION UNITARIA
+En una Empresa Farmacéutica se posee un archivo MAE_REMEDIOS (ordenado por Clave: Farmacia + Medicamento), 
+el que se actualiza semanalmente, a traves de la información que se encuentra cargada en un archivo de 
+MOVIMIENTOS (ordenado por Clavem: Farmacia + Medicamento, y Cod_Mov), de la siguiente forma:
+*Si Clave (MAE_REMEDIOS) es menor que Clavem (MOVIMIENTOS), simplemente se transfieren los datos 
+del Maestro a la salida y se graban.
+*Si Clave (MAE_REMEDIOS) es igual a Clavem (MOVIMIENTOS) y el Codmov es 1, se considera error y 
+se lista un mensaje indicando el tipo de error; pero si el Codmov es 2, entonces es un remedio que 
+deja de fabricarse y se transfiere el registro al archivo de Remedios vencidos (REM_VENC) ; 
+pero si el Cod_Mov es 3, se modifica la cantidad actual con la cantidad recibida.
+*Si Clave (MAE_REMEDIOS) es mayor que Clavem (MOVIMIENTOS) y el Codmov es 1, se incorpora el remedio a nuestro 
+Vademecum, considerando que la cantidad recibida configura la cantidad actual y la Fecha_Vencimiento es 30 días 
+posterior a la fecha actual; pero si el Codmov es 2 o 3 se considera error y se deben producir 
+los correspondientes mensajes de error.
+Se considera que solo existe un registro de movimiento para cada registro del maestro.
+MAE_REMEDIOS Ordenado por Farmacia y Medicamento
+|Farmacia||Medicamento||Cant_Actual||Fecha_Vencimiento|
+MOVIMIENTOS Ordenado por Farmacia, Medicamento y Cod_Mov
+|Farmacia||Medicamento||Cod_Mov||Cant_Recibida|
+REM_VENC Ordenado por Medicamento
+Medicamento||Cant_Vencida|
+Accion 2.2.19
+Ambiente
+    Formato_fecha = registro 
+        dd: 1..31
+        mm: 1..12
+        aaaa: N(4)
+    FR
+    Mae_Remedios = registro 
+        clavem = registro 
+            Farmacia: AN(15)
+            Medicamento: AN(15)
+        FR
+        CantAct: N(6)
+        FechaVenc: Formato_fecha
+    FR
+    Movimiento = registro 
+        clavemov = registro 
+            Farmacia: AN(15)
+            Medicamento: AN(15)
+            Cod_mov: N(10)
+        FR
+        CantRecib: N(6)
+    FR
+    REM_VENC = registro 
+        Medicamento: AN(15)
+        CantVenc: N(6)
+    FR
+    mae, mae_sal: archivo de Mae_Remedios ordenado por clavem
+    mov: archivo de movimiento ordenado por clavemov
+    venc: archivo de REM_VENC 
+    reg_mae,reg_salid: Mae_Remedios
+    reg_mov: movimiento
+    reg_ven: REM_VENC
+    Procedimiento leer_maestro() es;
+        LEER(mae,reg_mae)
+        si FDA(mae) entonces
+            reg_mae.clavem.Farmacia:=HW
+            reg_mae.clavem.Medicamento:=HW
+        fs
+    FP
+    Procedimiento leer_movimiento() es;
+        LEER(mov,reg_mov)
+        si FDA(mov) entonces
+            reg_mov.clavemov.Farmacia:=HW
+            reg_mov.clavemov.Medicamento:=HW
+        fs
+    FP
+    Procedimiento INICIALIZAR_ARCHIVOS() es; 
+        Abrir E/(mae);Abrir E/(mov);
+        Abrir S/(venc);Abrir S/(mae_sal)
+        leer_maestro();leer_movimiento()  
+    FP
+    Procedimiento procesos_iguales() es; 
+        segun reg_mae.clavem.Cod_mov hacer 
+            1: 
+                esc("ERROR ALTA NO VALIDA")
+                grabar(venc,reg_Salid)
+            2: 
+                reg_ven.Medicamento:=reg_mae.clavem.Medicamento
+                reg_ven.Cant_Vencida:=reg_mae.CantAct
+                grabar(venc,reg_salid)
+            3:
+                reg_mae.CantAct:=reg_mov.CantRecib
+                grabar(mae_sal,reg_mae)
+        fs
+    FP
+    Procedimiento procesos_distintos() es; 
+        segun reg_mov.clavemov.Cod_mov hacer 
+            1:
+                reg_salid.farmacias:=reg_mov.clave.farmacias
+                reg_salid.Medicamento:=reg_mov.clave.medicamento 
+                reg_salid.CantAct:=reg_mov.CantRecib
+                reg_salid.FechaVenc:=fechactual()+30 o sumar_dias(fechaactual(),30)
+                grabar(mae_sal,reg_salid)
+            2:
+                esc("ERROR BAJA NO VALIDA")
+                grabar(mae_sal, reg_mov)
+            3:
+                esc("ERROR MODIFICACION NO VALIDA")
+                grabar(mae_sal, reg_mov)
+        fs
+    FP
+Proceso
+    INICIALIZAR_ARCHIVOS()
+    Mientras (reg_mae.Clavem <> HW) o (reg_mov.clavemov <> HW) hacer 
+        si reg_mae.clavem < reg_mov.clavemov entonces
+            reg_salid:=reg_mae
+            grabar(mae_sal,reg_salid)
+            leer_maestro()
+        sino 
+            si reg_mae.clavem = reg_mov.clavemov entonces
+                proceso_iguales()
+                leer_maestro()
+                leer_movimiento()
+            sino 
+                procesos_distintos()
+                leer_movimiento()
+            fs
+        fs
+    FM
+    CERRAR(mae); CERRAR(MOV); CERRAR(venc); CERRAR(mae_sal)
+FP
+
+Ejercicio 2.2.20¶ //ACTUALIZACION POR LOTE 
+Se desea generar una secuencia, a partir de la secuencia del problema 2.01, 
+donde se actualice la fecha de aprobación del último exámen, para ello se cuenta con información del 
+último turno de exámen, según el siguiente detalle:
+EXAMENES Ordenado por Nro_Legajo
+|Nro_Legajo||Carrera||Cod_Materia||Fecha_Examen||Nota|
+Se debe considerar que no necesariamente todos los alumnos se presentan en cada turno de exámen, y 
+que un alumno puede presentarse a rendir más de una materia en un mismo turno. 
+Supónganse ambas secuencias ordenadas por Número de Legajo.
+Accion Ejer2.2.20 es
+Ambiente 
+    Formato_Fecha = registro 
+        dd: 1..31
+        mm: 1..12
+        aaa: N(4)
+    FR
+    Alumnos = registro 
+        clave = registro 
+            Nro_Legajo: N(5)
+        FR
+        ApeyNomb: AN(20)
+        Carrera: ["ISI", "IEM", "IQ"]
+        FechaNacimiento: Formato_Fecha
+        FechaIngre: Formato_Fecha
+        DNI: N(8)
+        Sexo: ["M", "F"]
+        FechaUltExam: Formato_Fecha
+        Nota: N(2)
+    FR
+    Examenes = registro 
+        Clave = registro 
+            Nro_Legajo: N(5)
+        FR
+        Carrera:  ["ISI", "IEM", "IQ"]
+        Cod_Materia: AN(1)
+        Fecha_Examen: Formato_Fecha
+        Nota: N(2)
+    FR
+    arch_alum,salid_alum: archivo de alumnos ordenado por clave 
+    arch_exam: archivo de Examenes ordenado por clave 
+    reg_alum, reg_salid,aux: Alumnos 
+    reg_exam: Examenes
+    Procedimiento leer_alumnos() es; 
+        LEER(arch_alum, reg_alum)
+        si FDA(arch_alum) entonces
+            reg_alum.clave:= HW
+        fs
+    FP
+    Procedimiento leer_examenes() es; 
+        LEER(arch_exam,reg_exam)
+        si FDA(arch_exam) entonces
+            reg_exam.clave:= HW
+        fs
+    FP
+    Procedimiento INICIALIZAR_ARCHIVOS() es;
+        ABRIR E/(arch_alum); ABRIR E/(arch_exam);
+        ABRIR S/(salid_alum); 
+        leer_alumnos(); leer_examenes(); 
+    FP
+    Procedimiento actualizar_alumnos() es; 
+        aux.Carrera:=reg_exam.carrera 
+        aux.FechaUltExam:=reg_exam.Fecha_Examen
+        aux.Nota:=reg_exam.Nota
+    FP
+    Procedimiento cargar_alumnos() es;
+        aux.clave:=reg_exam.clave 
+        aux.carrera:=reg_exam.carrera
+        aux.FechaUltExam:=reg_exam.Fecha_Examen
+        aux.Nota:=reg_exam.Nota
+    FP
+Proceso 
+    INICIALIZAR_ARCHIVOS()
+    Mientras (reg_alum.clave <> HW) o (reg_exam.clave <> HW) HACER 
+        si reg_alum.clave < reg_exam.clave entonces
+            reg_salid:= reg_alum
+            grabar(salid_alum,reg_alum)
+            leer_alumnos()
+        sino 
+            si reg_alum.clave = reg_exam.clave entonces
+                aux:= reg_alum
+                Mientras aux.clave = reg_exam.clave hacer
+                    actualizar_alumnos()
+                    leer_examenes()
+                FM
+                reg_salid:=aux
+                grabar(salid_alum,reg_salid)
+                leer_alumnos()
+            sino
+                cargar_alumnos()
+                leer_examenes()
+                aux.clave:=reg_exam.clave 
+                mientras aux.clave = reg_exam.clave hacer 
+                    actualizar_alumnos()
+                    leer_examenes()
+                FM
+                reg_salid:=aux
+                grabar(salid_alum,reg_salid)
+            fs
+        fs
+    FM
+    CERRAR(arch_alum); CERRAR(arch_exam); CERRAR(salid_alum); 
+FP
+
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+Bueno ahora actualizacion indexada 
+en este tienen que tener en cuenta solamente la forma de acceder al archivo y el condicional si 
+para poder acceder indexadamente, puede tener la clave en un archivo secuencial o bien pedirla al usuario 
+entonces por ejemplo: Suponiendo que tengo un archivo Clientes indexado por Nro_cliente, y un archivo Facturas ordenado por Nro_cliente y Nro_factura
+entonces como les dije pueden tener el valor de la clave del indexado en el secuencial o le piden al usuario 
+
+reg_cliente.Nro_Cliente:=reg_factura.clave.nro_Cliente ---> una vez que le asigno el valor a la clave de mi indexado (que este caso no le puse clave. porque esta indexado por Nro_cliente nomas) 
+leer(client, reg_cliente) ----> CON ESTE LEER VOY A ACCEDER AL ARCHIVO INDEXADO PARA VER LO QUE CONTIENE 
+Si existe entonces -----> ESTO SIRVE PARA CORROBORRAR SI REALMENTE ESTA ESE REGISTRO EN EL INDEXADO POR EL COMANDO "EXISTE"
+    //ACA HACEMOS TODAS LAS ACCIONES CORRESPONDIENTES MOSTRAR, ACTUALIZAR, ETC.  
+sino 
+    escribir("EL CLIENTE NO EXISTE") ----> Informamos al usuario que el usuario que ingreso o que nosotros quisimos leer no existe 
+Finsi 
+
+Tambien tengan cuidado con el indexado porque puede estar indexado por mas de una clave y tienen que hacer lo mismo 
+asignar cada campo clave del indexado con el secuencial o con los datos que le pidan al usuario y despues leen y pongan el si existe y hacen lo que tengan que hacer 
+no hay otra vuelta con este, es interactivo nomas =) 
+Ejemplos de indexado 
+
+Ejercicio 2.3.1.a¶
+Dado un fichero secuencial de Facturas, ordenado por Nro. de Cliente y Nro. de Factura, 
+con la siguiente estructura:
+FACTURAS Ordenado por Nro_Cliente, Nro_Factura
+|Nro_Cliente||Nro_Factura||Fecha||Importe|
+Se desea un listado con el siguiente detalle:
+|Nro. Cliente|	|Nombre Cliente|	|Numero Factura|
+Los datos del cliente se encuentran en un fichero indexado por Nro. de Cliente, 
+que tiene la siguiente estructura:
+CLIENTES Indexado por Nro_Cliente
+|Nro_Cliente||Nombre||DNI||CUIT||Domicilio|
+Accion Ejerci2.3.1 es 
+Ambiente
+    Formato_Fecha = registro 
+        dd: 1..31
+        mm: 1..12
+        aaaa: N(4)
+    FR
+    Facturas = registro 
+        Clave = registro 
+            Nro_Cliente: N(5)
+            Nro_Factura: N(5)
+        FR
+        Fecha: formato_fecha 
+        Importe: N(5)
+    FR
+    Cliente = registro  
+        Clave1 = registro  
+            Nro_cliente: N(5)
+        FR
+        Nombre: AN(5)
+        DNI: N(8)
+        CUIT: N(11)
+        Domicilio: AN(20)
+    FR
+    Factura: archivo de facturas ordenado por clave 
+    Client: archivo de cliente indexado por clave1
+    fact: Facturas 
+    cli: clientes 
+Proceso 
+    Abrir E/(Factura); Abrir E/(Client)
+    leer(Factura,fact); 
+    esc("  |Nro_Cliente|  " "   |Nombre Cliente|  " "  |Numero Factura|  ")
+    Mientras NFDA(Factura) hacer 
+        cli.clave1.Nro_Cliente:=fact.clave.nro_Cliente
+        leer(Client,cli)
+        si existe entonces 
+            esc("|"cli.clave1.nro_Cliente"|" "|"cli.nombre"|" "|"fact.clave.Nro_Factura"|")
+        sino 
+            esc("EL CLIENTE NO EXISTE")
+        fs 
+        leer(Factura,fact)
+    FM
+    CERRAR(factura); CERRAR(client); 
+FP
+
+Ejercicio 2.3.3¶
+Los automovilistas pasan por el peaje del Puente Gral. Belgrano y deben pagar según su categoría, pero además, 
+si ya han pasado previamente dentro del día tienen pase libre.
+Teniendo en cuenta el archivo siguiente, construya el algoritmo que realice lo que corresponda: 
+genere el comprobante, indicando el importe a pagar o emita un mensaje indicando que ya pasó anteriormente. 
+Además indique cuales deberían ser los datos de entrada.
+PEAJE Indexado por Patente, Fecha
+||Patente XXX-NNN||Fecha N(8)||Ult_Hora N(4)||Costo XXX,XX|
+Costo por categoria
+Categoria    Costo
+    1	     1,20
+    2	     2,50
+    3	     4,00
+    4	     5,00
+Accion Ejercicio233 es; 
+Ambiente 
+    Peaje = registro 
+        Patente: ["XXX-NNN"]
+        Fecha: N(8)
+        Ult_hor: N(4)
+        Costo: N(3,2)
+    FR
+    peaj: archivo de peaje indexado por patente, fecha 
+    reg_pea: peaje 
+    res_patent: ["XXX-NNN"]; res_categ: entero; res_hora: N(4)
+    esc("Ingrese su numero de patente: ")
+    leer(res_patent)
+    esc("Ingrese la hora en formato hhmm")
+    leer(res_hora)
+    reg_pea.Patente:=res_patent
+    reg_pea.fecha:=fecha_actual()
+    leer(peaj,reg_pea)
+    si existe entonces 
+        si res_hora > reg_pea.Ult_hor entonces 
+            esc("TIENE PASE LIBRE")
+        sino 
+            esc("Introduzca su categoria: 1-2-3-4")
+            leer(res_categ)
+            segun res_categ hacer 
+                1: esc("El total a pagar es de $1,20")
+                2: esc("El total a pagar es de $2,50")
+                3: esc("El total a pagar es de $4,00")
+                4: esc("El total a pagar es de $5,00")
+            fs
+            esc("Que tenga buen viaje")
+        fs
+    sino 
+        esc("El vehiculo no paso por el peaje")
+    fs
+    CERRAR(peaj)
+Faccion 
+
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+Bueno arreglo es mas tranqui, lo unico que tenien que tener en cuenta de este son los para, porque dependiendo del tamaño del arreglo se usan 
+1, 2 o 3 para 
+se usan 2 para cuando hablamos de matriz, 1 para cuando hablamos de vector y 3 cuando hablamos de una arreglo tridimensional =) 
+fijense ahora como seria el algoritmo pue 
+Accion ejemplo3 es; 
+Ambiente 
+    arr: arreglo[1..10] de entero; o tambien puede ser arr: arreglo[1..10] de caracter; o tambien arr:arreglo[1..N] de entero o de caracter;  
+    i: entero 
+Proceso 
+    para i:= 1 hasta 10 hacer 
+        leer(arr[i]) //siempre se hacer de esta forma arr[i], para que guarde en cada posicion del arreglo 
+    FinPARA 
+    //PARA MOSTRAR EL ARREGLO SE HACE LO MISMO POR EN VEZ DEL LEER ES ESCRIBIR 
+    para i:= 1 hasta 10 hacer 
+        escribir(arr[i])
+    Finpara 
+FinAccion 
+EE SI SABEN ALGEBRA ESTO DE TAQUITO SALE SOLO PORQUE ACUERDENSE QUE ARREGLO ES ASI 
+[] [] [] [] [] [] [] [] [] [] ----> en este caso es un vector 
+1  2  3  4  5  6  7  8   9  10----> es para que entiendan nomas como seria el orden del arreglo     
+entonces vamos a los que estabamos haciendo recien del ejemplo de arriba 
+Accion ejemplo3 es; 
+Ambiente 
+    arr: arreglo[1..10] de entero; o tambien puede ser arr: arreglo[1..10] de caracter; o tambien arr:arreglo[1..N] de entero o de caracter;  
+    i: entero 
+Proceso 
+    para i:= 1 hasta 10 hacer 
+        leer(arr[i]) //siempre se hacer de esta forma arr[i], para que guarde en cada posicion del arreglo 
+    FinPARA 
+    // cuando i = 1, y le ingresamos el valor 5 al arr[i]; entonces el arreglo va ir guardando [5]; 
+    // cuando i = 2, y le ingresamos el valor 8 al arr[i]; entonces el arreglo va ir guardando [8]; 
+    // cuando i = 3, y le ingresamos el valor 9 al arr[i]; entonces el arreglo va ir guardando [9]; 
+    // cuando i = 4 y le ingresamos el valor 3 al arr[i]; entonces el arreglo va ir guardando [3]; 
+    // cuando i = 5, y le ingresamos el valor 4 al arr[i]; entonces el arreglo va ir guardando [4]; 
+    // cuando i = 6, y le ingresamos el valor 0 al arr[i]; entonces el arreglo va ir guardando [0]; 
+    // cuando i = 7, y le ingresamos el valor 2 al arr[i]; entonces el arreglo va ir guardando [2]; 
+    // cuando i = 8, y le ingresamos el valor 6 al arr[i]; entonces el arreglo va ir guardando [6]; 
+    // cuando i = 9, y le ingresamos el valor 1 al arr[i]; entonces el arreglo va ir guardando [1]; 
+    // cuando i = 10, y le ingresamos el valor 8 al arr[i]; entonces el arreglo va ir guardando [8];  
+    y asi terminaria entonces cuando imprimamos los valores arreglo van a ser los que ingresaron 
+    para i:= 1 hasta 10 hacer 
+        escribir(arr[i])    [5] [8] [9] [3] [4] [0] [2] [6] [1] [8]  
+                         i:  1   2   3   4   5   6   7   8   9  10
+    Finpara     
+FinAccion
+
+Accion ejemplo4 es 
+Ambiente 
+    arr: arreglo[1..2, 1..5] de entero; tambien puede ser arr: arreglo[1..10] de caracter; o tambien arr:arreglo[1..N] de entero o de caracter; 
+    i, j: entero 
+Proceso 
+    para i:= 1 hasta 2 hacer //RECORRE LAS FILAS 
+        para j:= 1 hasta 5 hacer //RECORRE LAS COLUMNAS 
+            leer(arr[j]) //AGREGA LOS VALORES A LAS COLUMNAS 
+        Finpara 
+    Finpara 
+Finproceso 
+
+              j:  1   2   3   4   5  //Columnas  
+//FILAS: i: 1    [0] [0] [0] [0] [0]
+            2    [0] [0] [0] [0] [0]
+entonces aplicando lo mismo del ejemplo 
+Accion ejemplo4 es 
+Ambiente 
+    arr: arreglo[1..2, 1..5] de entero; tambien puede ser arr: arreglo[1..10] de caracter; o tambien arr:arreglo[1..N] de entero o de caracter; 
+    i, j: entero 
+Proceso 
+    para i:= 1 hasta 2 hacer //RECORRE LAS FILAS 
+        para j:= 1 hasta 5 hacer //RECORRE LAS COLUMNAS 
+            leer(arr[j]) //AGREGA LOS VALORES A LAS COLUMNAS 
+        Finpara 
+    Finpara 
+    //aca el que va a cambiar muy poco es el i, porque el j es donde ingresamos los valores 
+    // cuando i = 1, y j = 1,  le ingresamos el valor 5 al arr[i]; entonces el arreglo va ir guardando [5]; 
+    // cuando i = 1, y j = 2, le ingresamos el valor 8 al arr[i]; entonces el arreglo va ir guardando [8]; 
+    // cuando i = 1, y j = 3,le ingresamos el valor 9 al arr[i]; entonces el arreglo va ir guardando [9]; 
+    // cuando i = 1 y j = 4, le ingresamos el valor 3 al arr[i]; entonces el arreglo va ir guardando [3]; 
+    // cuando i = 1, y j = 5, le ingresamos el valor 4 al arr[i]; entonces el arreglo va ir guardando [4]; 
+    // cuando i = 2, y j = 1, le ingresamos el valor 0 al arr[i]; entonces el arreglo va ir guardando [0]; 
+    // cuando i = 2, y j = 2, le ingresamos el valor 2 al arr[i]; entonces el arreglo va ir guardando [2]; 
+    // cuando i = 2, y j = 3, le ingresamos el valor 6 al arr[i]; entonces el arreglo va ir guardando [6]; 
+    // cuando i = 2, y j = 4, le ingresamos el valor 5 al arr[i]; entonces el arreglo va ir guardando [5]; 
+    // cuando i = 2, y j = 5, le ingresamos el valor 8 al arr[i]; entonces el arreglo va ir guardando [8];  
+    para i:= 1 hasta 10 hacer 
+        escribir(arr[i])  
+    Finpara
+    
+           j: ->  1   2   3   4   5  //Columnas   
+//Filas i:->   1 [5] [8] [9] [3] [4] 
+               2 [0] [2] [6] [1] [8]    
+    asi va a mostrar por pantalla
+Finproceso 
+
+juegen con los j e i ponele que te piden en la diagonal principal un "*", un numero especificio, y ustedes hagan es esquemita que les hice 
+y fijense que le sacan al toque esto, entocnes ponele que tenemos un arreglo cuadrado, es decir de 5x5 
+Accion ejemplo5 es 
+Ambiente 
+    arr: arreglo[1..5, 1..5] de entero; 
+    i,j: entero 
+Proceso 
+    para i:= 1 hasta 5 hacer 
+        para i:= 1 hasta 5 hacer 
+            Leer(arr[i])
+            si i = j entonces 
+                leer(arr[i]) ----> en el caso que en la diagonal principal quieran un numero diferente al que van ingresando 
+            fs
+        Finpara 
+    FInpara 
+Finaccion 
+
+BUENO CON ESO ANDAN TIENEN BASTANTE, EXITOS GILES, HABLENME CUANDO LES CONTESTE LOS MSJ JAJAJA 
+TIENEN TAMBIEN LOS METODOS DE ORDENAMIENTO Y BUSQUEDA PERO ES MAS TEORICO, EN LA PRACTICA PUEDEE QUE SE USE EL DE BUSQUEDA MAS QUE EL DE ORDENAMIENTO 

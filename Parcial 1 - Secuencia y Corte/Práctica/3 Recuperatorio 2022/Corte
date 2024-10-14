@@ -1,0 +1,154 @@
+ACCION Ejercicio2 ES
+AMBIENTE
+    servicio = registro
+        sucursal: N(4)
+        area: N(1)
+        idServicio: N(6)
+        descripción: AN(45)
+        cantidadClientes: N(4)
+        monto: N(6.2)
+    FR
+    serv: archivo de servicio
+    s: servicio
+
+    salida = registro
+        sucursal: N(4)
+        monto: N(8.2)
+    FR
+    salida: archivo de servicio
+    sal: servicio
+
+    montoID, montoArea, montoSucursal, montoTotal, montoSucursal50, porcentaje, clientesArea, clientesID, clientesSucursal, montoAreaUno: entero
+
+    //cortes
+
+    // en la actividad dice infromar solo si la cantidad de clientes es par, yo lo interpreto como si la cantidad total hasta que se 
+    // llega a ese corte, ya que el registro en donde se encuentra ubicado cuando se hace el corte ya no es el mismo, 
+
+    // por ejemplo:
+    // SUCURSAL | AREA |    ID    | DESCRIPCION |  CANTIDAD CLIENTES  |  MONTO  |
+    //  0001    |   2  |  000101  |             |         0020        |  6008,3 |  <- El resguardo se encuentra acá
+    //  0001    |   2  |  000101  |             |         0012        |  8230,3 |  
+    //  0001    |   2  |  000102  |             |         0021        |  6010,3 |  <- Cuando el corte se hace, el registro está aca. resg <> registro recien en esta fila
+    //  0001    |   3  |  000103  |             |         0025        |  6008,3 |   
+   
+    Procedimiento corteID() es
+        Si clientesID MOD 2 = 0 entonces //si la cantidad de clientes es par, informar monto
+            Esc("En la sucursal", resgSucursal,"del área",resgArea,"el monto para", resgID,"es de", montoID)
+        Fs
+        clientesArea := clientesArea + clientesID
+        clientesID := 0
+        montoArea := montoArea + montoID
+        montoID := 0
+        resgID := s.idServicio
+    Fp
+    
+    Procedimiento corteArea() es
+        corteID()
+        Si clientesArea MOD 2 = 0 entonces //aca hay que poner otra vez el ID??, (en un power ya va diciendo los datos de este nivel para arriba nomas)
+            Esc("En la sucursal", resgSucursal,"del área",resgArea,"el monto es de", montoArea)
+        Fs
+        clientesSucursal := clientesArea + clientesArea
+        clientesArea := 0
+        montoSucursal:= montoSucursal + montoArea
+
+        //actividad b
+        // si el monto era de unas area 1, entonces le pongo ese monto a montoAreaUno para usarlo despues
+
+        // por ejemplo:
+        // SUCURSAL | AREA |    ID    | DESCRIPCION |  CANTIDAD CLIENTES  |  MONTO  |
+        //  0001    |   1  |  000101  |             |         0020        |  6008,3 |  <- El resguardo se encuentra acá
+        //  0001    |   1  |  000101  |             |         0012        |  8230,3 |  
+        //  0001    |   2  |  000102  |             |         0021        |  6010,3 |  <- resg <> registro corte
+        //  0001    |   3  |  000103  |             |         0025        |  6008,3 |   
+    
+        // para cuando se hace el corte, el montoArea tiene 6008,3 + 8230,3 =  14238,6
+        // y como es el area 1 le puse ese monto a la variable montoAreaUno, para que cuando se haga el corte sucursal se ponga la sucursal y el área.
+        // no se si es lo mismo ponerle eso de la salida en el área, pero lo hago de esa manera por si pasa esto:
+
+         // por ejemplo:
+        // SUCURSAL | AREA |    ID    | DESCRIPCION |  CANTIDAD CLIENTES  |  MONTO  |
+        //  0001    |   1  |  000101  |             |         0020        |  6008,3 |  
+        //  0001    |   1  |  000101  |             |         0012        |  8230,3 |  
+        //  0001    |   2  |  000102  |             |         0021        |  6010,3 |   <- El resguardo se encuentra acá
+        //  0001    |   3  |  000103  |             |         0025        |  6008,3 |   <- resg <> registro corte
+        //  0001    |  1!  |  000103  |             |         0025        |  6008,3 |   <- aca se vuelve a repetir el área uno y es la misma sucursal | resg <> registro corte
+
+        // si pasa esto, y la salida se grababa cuadno se hace el corte por área, entonces en la salida iba a estar dos veces a sucursal 0001
+        //por eso para prevenir esto puse lo de grabar salida en sucursal, asi, si el area se vuelve a repetir 
+    
+
+        Si resgArea = 1 entonces
+            montoAreaUno:= montoAreaUno + montoArea
+        Fs
+
+        montoArea:= 0
+        resgArea:= s.area
+
+    Fp
+
+    Procedimiento corteSucursal() es
+        corteArea()
+        Si clientesSucursal MOD 2 = 0 entonces
+            Esc("En la sucursal", resgSucursal,"el monto es de", montoSucursal)
+        Fs
+
+        clientesSucursal := 0
+
+        Si resgSucursal = 50 entonces //actividad c, informar porcentaje sucursal 50
+            montoSucursal50 := montoSucursal50 + montoSucursal
+        Fs
+
+        //actividad b
+        //cuando corta la sucursal pongo lo de la salida de la actividad B asi pongo la sucursal una vez. Y le pongo el total del area 1 solamente.
+        sal.sucursal := resgSucursal
+        sal.monto := montoAreaUno
+        montoAreaUno := 0 
+
+        //total general
+        montoTotal := montoSucursal + montoTotal
+        montoSucursal := 0 
+    Fp
+
+
+
+ALGORITMO
+    //archivo
+    Abrir E/(serv) ; Leer(serv,s)
+    Abrir S/(salida) 
+    //montos
+    montoArea:= 0 ; montoSucursal:= 0 ; montoSucursal50 := 0
+    //clientes
+    clientesArea := 0 ; clientesID := 0 ; clientesSucursal := 0
+    //resguardos
+    resgSucursal := s.sucursal ; resgArea := s.area ; resgID := s.ID
+
+    Mientras NFDA(servicio) hacer
+
+        clientesID := clientesID + s.cantidadClientes
+        montoID
+
+        Si resgSucursal <> s.sucursal entonces
+            corteSucursal()
+        Sino
+            Si resgArea <> s.area entonces
+                corteArea()
+            Sino
+                Si resgID <> s.idServicio entonces
+                    corteID()
+                Fs
+            Fs
+        Fs
+        Leer(serv,s)
+    FM
+
+    //actividad c
+    porcentaje := ( montoSucursal50 / montoTotal ) * 100
+    
+    Si porcentaje > 20 entonces
+        Esc("La sucursal 50 representa mas del 20% facturado por la empresa")
+    Sino
+        Esc("La sucursal 50 representa menos del 20% facturado por la empresa")
+    Fs
+
+FA
