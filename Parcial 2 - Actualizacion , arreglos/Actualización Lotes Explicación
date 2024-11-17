@@ -3,8 +3,8 @@ Ambiente
 		clave: dato
 		campo1: dato
 	fr
-	archMae, archAux: archivo de Maestro ordenado por clave
-	mae, aux: Maestro
+	archMae, archActualizado: archivo de Maestro ordenado por clave
+	mae, act, aux: Maestro
 
 	Movimiento = registro
 		clave: dato
@@ -27,7 +27,7 @@ Ambiente
 		fs
 	fp
 
-	Procedimiento Modificaciones() es
+	Procedimiento Modificar() es
 		Si mov.codigo = “ALTA” entonces
 			Esc("Error, alta inválida, registro ya existente")
 		sino
@@ -50,15 +50,16 @@ Algoritmo
 	Mientras ( mov.clave <> HV ) o ( mae.clave <> HV ) hacer
 		Si mae.clave < mov.clave entonces
 		//salida desde maestro, no hay modificaciones para este registro
-			aux:=mae
-			Grabar(archAux,aux) ; LeerMaestro()
-			sino
+			act:=mae
+			Grabar(archActualizado, act) ; LeerMaestro()
+		sino
 			Si mae.clave = mov.clave entonces
 			//hay modificaciones para el registro
 				Mientras mae.clave = mov.clave hacer
 					Modificar() ; LeerMovimiento()
 				fm
-				Grabar(archAux,aux)
+				act := aux
+				Grabar(archActualizado,act)
 				LeerMaestro() 
 			sino
 				Si mae.clave > mov.clave entonces
@@ -83,11 +84,12 @@ Algoritmo
 					Mientras mae.clave = mov.clave hacer
 						Modificar() ; LeerMovimiento()
 					fm
-					Grabar(archAux, aux)
+					act := aux
+					Grabar(archActualizado, act)
 				fs
 			fs
 		fs
 	fm
 
-	Cerrar(archMae) ; Cerrar(archMov) ; Cerrar(archAux)
+	Cerrar(archMae) ; Cerrar(archMov) ; Cerrar(archActualizado)
 Fa
