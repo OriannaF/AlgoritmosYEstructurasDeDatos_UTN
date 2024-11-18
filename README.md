@@ -2,9 +2,10 @@
 
 https://aed-frre.github.io/
 
-# Apuntes de Teoría
+# Apuntes
 
 ## Parcial 3: Árboles y Listas
+Apunte con animaciones :P
 [Teoría Parcial 3](https://www.canva.com/design/DAGW2Bef6yk/FkoQQKVEaTlco1AalBHzmQ/view?utm_content=DAGW2Bef6yk&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 
 ## Parcial 2: Actualización y Procesos Estadísticos
