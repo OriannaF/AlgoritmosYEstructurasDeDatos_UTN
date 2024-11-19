@@ -1,0 +1,61 @@
+//Se dispone de una lista simplemente encadenada cuyos registros están ordenados en forma ascendente por una 
+clave de tipo entero;  diseñar un algoritmo que  invierta el orden de la lista.
+
+Accion Ej4(PRIM: puntero a Nodo) es
+Ambiente
+    Nodo = registro
+        dato: entero //clave
+        prox: puntero a Nodo
+    fr
+	PRIM,PRIM2,q: puntero a Nodo
+
+Algoritmo
+	PRIM2:= nil
+	p:PRIM
+
+	mientras (p<>nil) hacer
+		nuevo(q)
+		*q.dato:= *p.dato
+		si PRIM2 = nil entonces
+			*q.prox:= nil		
+		sino
+			*q.prox:PRIM2		//carga apilada 		
+		fs
+		PRIM2:=	q
+		p:=*p.prox
+	fm
+
+	Esc("lista invertida");
+	p:PRIM2
+
+	mientras (p<>nil) hacer		//muestro en pantalla la inversa
+		esc(p)
+		p:=*p.prox
+	fm
+fa
+
+//se hace una carga apilada porque va a ir inviertiendo el orden, o sea el primer nodo va a pasar a ser el último, porque el nodo que sigue al primero, se va a insertar antes de ese
+
+ej:
+
+*Paso 1*
+Lista original //p y PRIM apuntan a 1
+1 -> 2 -> 3 -> nil
+
+Lista invertida //q apunta a 1. PRIM2 apunta a 1
+1 -> nil
+
+
+*Paso 2*
+Lista original // PRIM sigue apuntando a 1, pero p avanza a 2
+1 -> 2 -> 3 -> nil
+
+Lista invertida //q apunta a 2. PRIM2 apunta a 2
+2 -> 1 -> nil
+
+*Paso 3*
+Lista original // PRIM sigue apuntando a 1, pero p avanza a 3
+1 -> 2 -> 3 -> nil
+
+Lista invertida //q apunta a 3. PRIM2 apunta a 3
+3 -> 2 -> 1 -> nil

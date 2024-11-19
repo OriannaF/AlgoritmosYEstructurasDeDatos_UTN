@@ -1,0 +1,106 @@
+Dada  una  lista  simplemente  encadenada  que  contiene  datos  de  todas  las  provincias  de  la  República  Argentina: 
+nombre,  capital,  cantidad  total  de  habitantes  y  cantidad  de  analfabetos,  y  está  ordenada  en  forma  decreciente  por 
+número  de  habitantes  analfabetos,  generar  otras  tres  listas  que  contengan  el  nombre,  la  capital  y  el  porcentaje  de 
+analfabetos de las Provincias que respondan a las siguientes restricciones. 
+                            L1: < = 10 % analfabetos 
+                            L2: 16 a 25 % analfabetos 
+                            L3: > = 26 % analfabetos
+
+
+
+Algoritmo
+    Ambiente
+        Nodo = registro
+            nombre: AN(20)
+            capital: AN(20)
+            cantidadTotalHabitantes: N(10)
+            cantidadAnalfabetos: N(10)
+            prox: puntero a Nodo
+        fr
+
+        p,i,j,k,PRIM,PRIM1,PRIM2,PRIM3: puntero a Nodo 
+
+        porcentaje: entero
+
+        Nodo2 = registro
+            nombre: AN(20)
+            capital: AN(20)
+            porcentajeAnalfabetos: N(10)
+            prox: puntero a Nodo2
+        fr
+
+        q: puntero a Nodo2
+
+        Procedimiento CargarNodo() es
+            *q.nombre:= *p.nombre
+            *q.capital:= *p.capital
+            *q.porcentajeAnalfabetos:= porcentaje
+        fp
+
+        Procedimiento CargarUno() es
+            Si PRIM1 = NIL entonces
+                *q.prox:= NIL  
+            sino
+                *q.prox:= PRIM1
+            fs
+            PRIM1:= q
+            p:=*p.prox
+        fp
+
+        Procedimiento cargarDos() es
+            Si PRIM2 = NIL entonces
+                *q.prox:= NIL 
+            sino
+                *q.prox:= PRIM2
+            fs
+            PRIM2:= q
+            p:=*p.prox
+        fp
+
+        Procedimiento cargarTres() es
+            Si PRIM3 = NIL entonces
+                *q.prox:= NIL 
+            sino
+                *q.prox:= PRIM3
+            fs
+            PRIM3:= q
+            p:=*p.prox
+        fp
+        // creo que se podria hacer una funcion asi pero no estoy segura
+        // Funcion cargarListaNueva(x:puntero a Nodo) es
+        //    Si x = NIL entonces
+        //        *q.prox:= NIL 
+        //    sino
+        //        *q.prox:= x
+        //    fs
+        //    x:= q
+        //    p:=*p.prox
+        // fp
+        
+		
+	fm
+    Algoritmo
+        p:= PRIM
+        //PRIM1:= NIL esto de prim vi que no lo pone en na solucion, cuando se crea una lista nueva, prim ya apunta a NIL?
+        //PRIM2:= NIL
+        //PRIM3:= NIL
+
+        Mientras (p<>NIL) hacer
+
+            Nuevo(q)
+
+            porcentaje:= ((*p.cantidadAnalfabetos)/(cantidadTotalHabitantes)) * 100
+
+            CargarNodo()
+
+            Segun porcentaje hacer
+                <= 10: CargarUno()
+                >=16 Y <=25: CargarDos()
+                >= 26: CargarTres()
+            fs
+            
+        fm
+    fa
+fa
+
+         
