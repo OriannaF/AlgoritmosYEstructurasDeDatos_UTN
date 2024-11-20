@@ -112,6 +112,9 @@ Accion Ej6(PRIM: puntero a Nodo) es
 
 
 		PRIM:= NIL
+		PRIM1:= NIL  //Las listas nuevas tienen que apuntar a algo
+		PRIM2:= NIL
+		PRIM3:= NIL
 
 		Esc("Sistema ÑOQUIS ;)")
 		Esc("Ingrese una opción")
