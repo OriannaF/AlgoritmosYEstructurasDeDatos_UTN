@@ -41,7 +41,7 @@ Accion ListaSimpleCircular_4.8 ES
 		    nuevo(q);                                    // Crear un nuevo nodo `q`.
 		    LEER(*q.dato)                                // Leer el valor ingresado por el usuario y almacenarlo en `q.dato`.
 		
-		    SI prim = nil ENT                            // Caso 1: Si la lista está vacía:
+		    SI prim = nil entonces                            // Caso 1: Si la lista está vacía:
 		        prim := q                                //    - `q` se convierte en el primer nodo (prim).
 		        *q.prox := q                             //    - El nodo apunta a sí mismo, formando un ciclo.
 		    SINO                                         // Caso 2: Si la lista no está vacía:
@@ -49,10 +49,11 @@ Accion ListaSimpleCircular_4.8 ES
 		
 		        // Recorrer la lista mientras no se vuelva al inicio (*p.prox <> prim) y
 		        // el dato del nodo actual (*p.dato) sea menor que el nuevo dato (*q.dato).
-		        MIENTRAS (*p.prox <> prim) y (*p.dato < *q.dato) HACER
+		       
+										 MIENTRAS (*p.prox <> prim) y (*p.dato < *q.dato) HACER
 		            ant := p                             // Guardar el nodo actual como `ant` (anterior).
 		            p := *p.prox                         // Avanzar al siguiente nodo.
-		        FM
+		        	FM
 		
 		        // Caso 2a: Insertar antes del primer nodo (nuevo valor es el menor de todos).
 		        SI p = prim ENT
