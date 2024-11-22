@@ -36,48 +36,48 @@ Accion ListaSimpleCircular_4.8 ES
 		FS
 	FP
 
-		PROCEDIMIENTO insertar() es
-		    ESC("Ingrese el valor que quiere insertar:")  // Solicitar al usuario el dato a insertar.
-		    nuevo(q);                                    // Crear un nuevo nodo `q`.
-		    LEER(*q.dato)                                // Leer el valor ingresado por el usuario y almacenarlo en `q.dato`.
-		
-		    SI prim = nil entonces                            // Caso 1: Si la lista está vacía:
-		        prim := q                                //    - `q` se convierte en el primer nodo (prim).
-		        *q.prox := q                             //    - El nodo apunta a sí mismo, formando un ciclo.
-		    SINO                                         // Caso 2: Si la lista no está vacía:
-		        p := prim                                //    - Inicializar `p` en el primer nodo.
-		
-		        // Recorrer la lista mientras no se vuelva al inicio (*p.prox <> prim) y
-		        // el dato del nodo actual (*p.dato) sea menor que el nuevo dato (*q.dato).
-		       
-										 MIENTRAS (*p.prox <> prim) y (*p.dato < *q.dato) HACER
-		            ant := p                             // Guardar el nodo actual como `ant` (anterior).
-		            p := *p.prox                         // Avanzar al siguiente nodo.
-		        	FM
-		
-		        // Caso 2a: Insertar antes del primer nodo (nuevo valor es el menor de todos).
-		        SI p = prim ENT
-		            k := prim                            // Inicializar `k` para buscar el último nodo.
-		            MIENTRAS *k.prox <> prim HACER       // Recorrer la lista hasta encontrar el último nodo.
-		                k := *k.prox                     // Avanzar al siguiente nodo.
-		            FM
-		            *k.prox := q                         // El último nodo apunta al nuevo nodo `q`.
-		            *q.prox := p                         // El nuevo nodo `q` apunta al primer nodo actual (`p`).
-		            prim := q                            // Actualizar `prim` para que apunte al nuevo nodo.
-		
-		        // Caso 2b: Insertar después del último nodo.
-		        SINO SI *p.prox = prim ENT
-		            *p.prox := q                         // El nodo actual `p` apunta al nuevo nodo `q`.
-		            *q.prox := prim                      // El nuevo nodo `q` apunta al primer nodo (`prim`).
-		
-		        // Caso 2c: Insertar entre dos nodos.
-		        SINO
-		            *ant.prox := q                       // El nodo anterior (`ant`) apunta al nuevo nodo `q`.
-		            *q.prox := p                         // El nuevo nodo `q` apunta al nodo actual (`p`).
-		        FS
-		    FS
-		    ESC("Elemento agregado a la lista")          // Confirmar que el nodo fue insertado correctamente.
-		FP
+	PROCEDIMIENTO insertar() es
+		ESC("Ingrese el valor que quiere insertar:")  // Solicitar al usuario el dato a insertar.
+		nuevo(q);                                    // Crear un nuevo nodo `q`.
+		LEER(*q.dato)                                // Leer el valor ingresado por el usuario y almacenarlo en `q.dato`.
+	
+		si (prim = nil) entonces                            // Caso 1: Si la lista está vacía:
+			prim := q                                //    - `q` se convierte en el primer nodo (prim).
+			*q.prox := q                             //    - El nodo apunta a sí mismo, formando un ciclo.
+		sino                                         // Caso 2: Si la lista no está vacía:
+			p := prim                                //    - Inicializar `p` en el primer nodo.
+	
+			// Recorrer la lista mientras no se vuelva al inicio (*p.prox <> prim) y
+			// el dato del nodo actual (*p.dato) sea menor que el nuevo dato (*q.dato).
+			
+			MIENTRAS (*p.prox <> prim) y (*p.dato < *q.dato) HACER
+				ant := p                             // Guardar el nodo actual como `ant` (anterior).
+				p := *p.prox                         // Avanzar al siguiente nodo.
+			FM
+	
+			// Caso 2a: Insertar antes del primer nodo (nuevo valor es el menor de todos).
+			SI p = prim ENT
+				k := prim                            // Inicializar `k` para buscar el último nodo.
+				MIENTRAS *k.prox <> prim HACER       // Recorrer la lista hasta encontrar el último nodo.
+					k := *k.prox                     // Avanzar al siguiente nodo.
+				FM
+				*k.prox := q                         // El último nodo apunta al nuevo nodo `q`.
+				*q.prox := p                         // El nuevo nodo `q` apunta al primer nodo actual (`p`).
+				prim := q                            // Actualizar `prim` para que apunte al nuevo nodo.
+	
+			// Caso 2b: Insertar después del último nodo.
+			SINO SI *p.prox = prim ENT
+				*p.prox := q                         // El nodo actual `p` apunta al nuevo nodo `q`.
+				*q.prox := prim                      // El nuevo nodo `q` apunta al primer nodo (`prim`).
+	
+			// Caso 2c: Insertar entre dos nodos.
+			SINO
+				*ant.prox := q                       // El nodo anterior (`ant`) apunta al nuevo nodo `q`.
+				*q.prox := p                         // El nuevo nodo `q` apunta al nodo actual (`p`).
+			FS
+		FS
+		ESC("Elemento agregado a la lista")          // Confirmar que el nodo fue insertado correctamente.
+	FP
 		
 	PROCEDIMIENTO borrar() es
 		ESC("ingrese el valor del elemento a eliminar:")

@@ -1,0 +1,54 @@
+Lista original
+Prim-> (1) 2 3 4 5 6 7 8 9 10   (Ascendente)
+
+Ejercicio: A partir de una lista dada invertir el orden de la lista:
+Es decir, que se empiece desde el último al primero, invirtiendo el orden.
+
+Lista de salida
+Prim-> (10) 9 8 7 6 5 4 3 2 1   (Descendente)
+
+Cómo hacer: A partir de la lista dada, en otra lista ir cargando los elementos de manera invertida.
+
+
+Accion Invertir_Orden_Lista (Prim: Puntero a Nodo) Es
+    Ambiente
+        Nodo = Registro
+            num: Entero
+            prox: Puntero a Nodo
+        Proceso
+        ant,p: Puntero a Nodo      //Puntero de lista original
+        ant1,p1,q1,Prim1: Puntero a Nodo //Punteros de lista de salida
+        valor: Entero
+
+    Proceso
+        //Para este proceso conviene hacer una Carga Apilada, para que Prim apunte al último nodo en introducirse, el 10.
+        //IMPORTANTE: Siempre hay que inicializar una lista vacía
+        Prim1:= Nil 
+        //IMPORTANTE: Siempre hay que inicializar los punteros de recorrido de la lista (solo p si se va a recorrer/ p y ant si se va a eliminar o agregar un nodo)
+        p:= Prim
+        ant:= Nil
+        Mientras (p <> Nil) Hacer
+            //Eliminación y resguardo del valor
+            *ant.prox:= *p.prox
+            valor:= *p.num
+            Disponer(p)
+
+            //Carga Apilada para invertir orden
+            Nuevo(q1)
+            *q1.num:= valor
+            *q1.prox:= Prim1
+            Prim1:= q1
+
+            //Avanzo lista original
+            ant:= p
+            p:= *p.prox
+        FinMientras
+        Escribir("Se invirtió el orden de la lista")
+        Escribir("Nuevo orden:")
+        p1:= Prim1
+        Mientras (p1 <> Nil) Hacer
+            Escribir(*p1.num)
+            p1:= p1.prox
+        FinMientras
+        Escribir("Proceso terminado")
+FinAccion
