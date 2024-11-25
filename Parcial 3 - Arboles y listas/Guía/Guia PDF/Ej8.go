@@ -12,7 +12,7 @@ Accion ListaSimpleCircular_4.8 ES
 	prim,p,q,ant,k:puntero a nodo
 
 	op: ("s","n")
-	elec:1..3
+	elec: 1..3
 	elemento: entero
 
 	PROCEDIMIENTO buscar() es
@@ -36,7 +36,7 @@ Accion ListaSimpleCircular_4.8 ES
 		FS
 	FP
 
-	PROCEDIMIENTO insertar() es
+	PROCEDIMIENTO insertar() es //CARGA ORDENADA
 		ESC("Ingrese el valor que quiere insertar:")
 		nuevo(q); LEER(*q.dato)
 		SI prim= nil ENT
@@ -44,12 +44,12 @@ Accion ListaSimpleCircular_4.8 ES
 			*q.prox:= q
 		SINO	
 			p:=prim
-			MIENTRAS (*p.prox <> prim) y (*p.dato < *q.dato) HACER
+			MIENTRAS (*p.prox <> prim) y (*p.dato < *q.dato) HACER //BUSCAR COMO LUCAS HACEEE (LO MISMO QUE CARGA LISTA SIMPLE)
 				ant:= p
 				p:= *p.prox
-			FM
-			SI p = prim ENT  			//primerElemento
-				k= prim
+			FM 
+			SI p = prim ENTONCES  			//primerElemento
+				k:= prim
 				MIENTRAS *k.prox <> prim HACER
 					k:=*k.prox
 				FM
@@ -57,7 +57,7 @@ Accion ListaSimpleCircular_4.8 ES
 				*q.prox:=p
 				prim:=q
 			SINO
-				SI *p.prox = prim ENT  //ultimoElemento
+				SI *p.prox = prim ENTONCES  //ultimoElemento
 					*p.prox:=q
 					*q.prox:=prim
 				SINO
@@ -113,7 +113,7 @@ Accion ListaSimpleCircular_4.8 ES
 		esc("2-Insertar")
 		esc("3-Borrar")
 
-		esc("que desea realizar:")leer(elec)
+		esc("que desea realizar:") ; leer(elec)
 		SEGUN elec HACER
 			1: buscar()
 			2: insertar()	

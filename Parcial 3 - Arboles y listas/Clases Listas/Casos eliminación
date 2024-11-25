@@ -1,0 +1,40 @@
+// Casos de eliminacion
+
+
+                    Condicion           Acciones
+UNICO ELEMENTO       p = prim             prim:= nil (o prim:= *p.prox )
+                     a = nil              
+                     
+PRIMER ELEMENTO       misma                      prim:= *p.prox
+
+
+ELEMENTO INTERMEDIO  p<> nil                    *a.prox:= *.prox
+                     a<> nil
+                     p.dato = dato
+
+
+ULTIMO ELEMENTO      p.prox = nil                   *a.prox:= nil
+                     a <> nil
+                     p.dato = dato
+
+
+
+
+
+
+
+
+SI (*q.dato = valor) ENTONCES
+    SI (a = nil) ENTONCES
+    Prim = *q.prox
+    SINO
+    *a.prox:= *q.prox
+    FIN SI
+    DISPONER(q)
+   
+SINO
+    Escribir ('Error, el valor no existe')        
+FIN SI
+
+
+
