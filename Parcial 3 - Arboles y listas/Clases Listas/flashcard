@@ -1,0 +1,55 @@
+//carga apilada
+
+LEER (valor)
+
+Prim:= nil
+MIENTRAS (valor <> '*') HACER
+    NUEVO (p)
+    *p.Dato:= valor
+    *p.Prox:= Prim
+    Prim:= p
+    LEER(valor)
+FIN MIENTRAS
+
+//carga encolada
+LEER (valor)
+
+Prim:= nil
+MIENTRAS (valor <> '*') HACER
+    NUEVO (p)
+    *p.Dato:= valor
+    *p.Prox:= nil
+
+    SI Prim = nil ENTONCES
+        Prim = p
+    SINO
+        *a.Prox:= p
+    FIN SI
+    a:=p
+    LEER(valor)
+FIN MIENTRAS
+
+
+//carga ordenada
+
+Prim:= nil
+A:= nil;
+
+LEER (valor) 
+NUEVO (p) 
+*p.dato:= valor 
+q:= Prim 
+
+MIENTRAS (q <> nil) y (*q.dato < valor) HACER
+    a:= q
+    q:= *q.prox
+FIN MIENTRAS
+
+SI (a = nil) ENTONCES
+    *p.prox:= Prim
+    Prim:= p
+SINO
+    *p.prox:= q
+    *a.prox:= p
+FIN SI
+
