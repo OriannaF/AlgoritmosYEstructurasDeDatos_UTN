@@ -52,7 +52,7 @@ Proceso
 	
 			// Buscar el nodo cabecera del aula en la lista doble enlazada
 			q := primAula                 // Iniciamos la búsqueda desde el inicio de la lista doble
-			mientras (*q.prox <> nil) Y (*q.cursoNro <> aulaAsignada) hacer // Recorremos hasta encontrar el aula
+			mientras (*q.prox <> primAula) Y (*q.cursoNro <> aulaAsignada) hacer // Recorremos hasta encontrar el aula
 				q := *q.prox              // Avanzamos al siguiente nodo
 			fm
 
@@ -60,7 +60,7 @@ Proceso
 			*q.cantidad := q.cantidad + 1
 
 			// Si no se encuentra el nodo cabecera del aula, se crea uno nuevo
-			si *q.prox = nil entonces
+			si *q.prox = primAula entonces
 				nuevo(q)                // Creamos un nuevo nodo
 				*q.cursoNro := aulaAsignada // Asignamos el número del aula
 				*q.cantidad := 0         // Inicializamos la cantidad de alumnos a 0
@@ -87,11 +87,11 @@ Proceso
 			nuevo(nuevoNodo)
 			*nuevoNodo.cursoNro := aulaAsignada   // Aula asignada
 			*nuevoNodo.cantidad := 1             // Nodo intermedio siempre representa 1 alumno
-			nuevoNodo.legajo := p.legajo        // Asignamos el legajo del alumno
+			nuevoNodo.legajo := *p.legajo        // Asignamos el legajo del alumno
 
 			// Insertar el nodo intermedio después del nodo cabecera
-			*nuevoNodo.prox := q.prox            // Conectamos al siguiente nodo
-			si q.prox <> nil entonces           // Si no es el último nodo
+			*nuevoNodo.prox := *q.prox            // Conectamos al siguiente nodo
+			si *q.prox <> PrimAula entonces           // Si no es el último nodo
 				*q.prox.ant := nuevoNodo        // Ajustamos el enlace del siguiente nodo
 			fs
 			*q.prox := nuevoNodo                 // Enlazamos el nodo cabecera al nuevo nodo
@@ -103,7 +103,7 @@ Proceso
 		fs  
 	
 		// Eliminar el nodo actual de la lista original  
-		p := p.prox  
+		p := *p.prox  
 	fm  
 	
 	// Calcular promedio de alumnos por aula  
@@ -115,12 +115,12 @@ Proceso
 
 	// Determinar el aula con mayor cantidad de alumnos
 	q := primAula                     // Iniciamos desde el primer nodo cabecera
-	mientras (q <> nil) hacer          // Recorremos la lista doble enlazada
+	mientras (*q.prox <> PrimAula) hacer          // Recorremos la lista doble enlazada
 		si (q.cantidad > maxAlumnos) entonces // Si el aula tiene más alumnos que el máximo actual
-			maxAlumnos := q.cantidad       // Actualizamos el máximo
-			aulaMax := q.cursoNro          // Guardamos el número del aula
+			maxAlumnos := *q.cantidad       // Actualizamos el máximo
+			aulaMax := *q.cursoNro          // Guardamos el número del aula
 		fs
-		q := q.prox                     // Avanzamos al siguiente nodo
+		q := *q.prox                     // Avanzamos al siguiente nodo
 	fm
 
 	
