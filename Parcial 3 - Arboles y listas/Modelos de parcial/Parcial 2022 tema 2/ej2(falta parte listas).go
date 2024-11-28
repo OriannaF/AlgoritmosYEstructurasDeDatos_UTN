@@ -28,8 +28,6 @@ Función Presion(N: arreglo de [1…4] de entero; i,prom: entero): real es
 	//caso Recursivo 
 		Presion:= Presion(N; i-1 ; ; prom + N[i] )
 	Fs
-
-	Presion := (Presion(N, i-1) * (i-1) + N[i]) / i
 Ff
 
 Mientras (p distinto NIL) entonces //lista
@@ -39,7 +37,7 @@ Mientras (p distinto NIL) entonces //lista
 	P:= *p.prox
 Fm
 
-//valor real sin prom
+//valor real sin prom (hizo juampy)
 Funcion prom(A:Arreglo de [1..4] de enteros, i: entero): real es
 	Si (i=1) entonces
 		prom:= A[i]/4
