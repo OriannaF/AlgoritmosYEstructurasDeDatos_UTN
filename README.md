@@ -1,7 +1,12 @@
 # 👩🏻‍💻 AED
 
 [Guia aed github](https://aed-frre.github.io/)
-Hay una guia pdf, que creo que la subi tmb a los repositorios
+
+Hay una guia en pdf, que creo que la subi tmb a los repositorios.
+La guia completa del pdf y algunos ejercicios estan resueltos acá: (no estoy segura de que tan bien estan los ejercicios porque no vi todos pero la mayoria estan bien para usarlo de referencia)
+
+[Repositorio Leonardo Brabo](https://github.com/LeonardoBrabo/Algoritmos_Resueltos)
+
 ---
 
 ## 🌳 Parcial 3: Listas y recursividad
@@ -27,3 +32,4 @@ por ahora el apunte tiene solo práctica, ya voy a poner la teoria
 
 - 📄 [Teoría/Práctica Parcial 1] (todavia no hice, cuando tenga que rendir final lo actualizo jeje)
 - 👾 [Código de guía, parciales](https://github.com/OriannaF/AlgoritmosYEstructurasDeDatos_UTN/tree/main/Parcial%201%20-%20Secuencia%20y%20Corte)
+⚠️ No sé que tan bien están estos ejercicios, hace mucho que no los reviso. Cuando tenga que rendir el final los actualizo.
