@@ -16,3 +16,8 @@
 - 👾 [Código de guía, parciales](https://github.com/OriannaF/AlgoritmosYEstructurasDeDatos_UTN/tree/main/Parcial%202%20-%20Actualizacion%20%2C%20arreglos)
 
 ---
+
+## 📁 Parcial 1: Secuencia y corte de control
+
+- 📄 [Teoría/Práctica Parcial 1] (todavia no hice, cuando tenga que rendir final lo actualizo jeje)
+- 👾 [Código de guía, parciales](https://github.com/OriannaF/AlgoritmosYEstructurasDeDatos_UTN/tree/main/Parcial%201%20-%20Secuencia%20y%20Corte)
