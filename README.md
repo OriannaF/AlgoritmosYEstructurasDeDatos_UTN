@@ -8,6 +8,7 @@
 
 ## 📁 Parcial 3: Árboles y Listas
 - [Teoría/Práctica Parcial 3](https://www.canva.com/design/DAGW2Bef6yk/FkoQQKVEaTlco1AalBHzmQ/view?utm_content=DAGW2Bef6yk&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+![IMG_0863](https://github.com/user-attachments/assets/6af60380-388a-410e-afa1-13424a8bb1f2)
 
 ## 📁 Parcial 2: Actualización y Procesos Estadísticos
 - [Teoría/Práctica Parcial 2](https://www.canva.com/design/DAGWeGfRepE/dmyP57jEsAK7UhxBGNiq3w/view?utm_content=DAGWeGfRepE&utm_campaign=designshare&utm_medium=link&utm_source=editor)
