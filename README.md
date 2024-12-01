@@ -35,3 +35,16 @@ por ahora el apunte tiene solo práctica, ya voy a poner la teoria
 - 📄 [Teoría/Práctica Parcial 1] (todavia no hice, cuando tenga que rendir final lo actualizo jeje)
 - 👾 [Código de guía, parciales](https://github.com/OriannaF/AlgoritmosYEstructurasDeDatos_UTN/tree/main/Parcial%201%20-%20Secuencia%20y%20Corte)
 ⚠️ No sé que tan bien están estos ejercicios, hace mucho que no los reviso. Cuando tenga que rendir el final los actualizo.
+
+---
+
+
+# Consejos
+
+- Aprender bien: intenten entender bien las estructuras y sobre todo que estan haciendo. Saber recetas te sirve si tenes suerte pero la mayoria de veces tenes que entender bien, porque si te toman algo mas rebuscado en un parcial solo lo podes hacer si entendes.
+  
+- Calidad es mejor que cantidad: es mejor que entiendan bien y hagan 5 ejercicios, a que hagan 30 y que esten mal.
+
+- Consulten: idealmente al profesor, si no es posible a un compañero que la tenga clara. Personalmente tuve que recursar la materia porque estudiaba sola y a la hora del parcial muchas cosas no las estaba haciendo bien, pero al. o tener alguien que te corrija es dificil darse cuenta.
+
+- A no desanimarse: es una materia complicada e importante para sistemas, asi que no pasa nada si no aprobas :), muchas veces depende de cuánto estudiaste y tu suerte cuando te corrigen. Lo importante es seguir intentando y aprender.
