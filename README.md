@@ -1,5 +1,7 @@
 # 👩🏻‍💻 AED
 
+En cada carpeta de parcial voy poniendo los parciales que nos toman en 2024. Mis parciales corregidos y además de algunos compañeros que se sacaron mejor nota, para saber como hacer mejor 😎
+
 [Guia aed github](https://aed-frre.github.io/)
 
 Hay una guia en pdf, que creo que la subi tmb a los repositorios.
