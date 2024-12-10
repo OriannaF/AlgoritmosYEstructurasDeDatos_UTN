@@ -32,6 +32,8 @@ Ambiente
 		ant: puntero a listaUno
 	fr
 
+	primUno, qUno, k, antU: puntero a listaUno
+
 	//La segunda contendrá el código y nombre de los proyectos que tengan al menos el 50% de sus errores en estado resueltos o en Proceso. (Ordenada por dicho porcentaje de mayor a menor)
 
 	listaDos = registro
@@ -41,7 +43,7 @@ Ambiente
 		ant: puntero a listaUno
 	fr
 
-	primDos, qDos: puntero a
+	primDos, qDos, m, antD: puntero a listaDos
 
 
 Algoritmo
@@ -79,29 +81,29 @@ Algoritmo
 			*qUno.nombre:= proy.nombre                                    // Crear un nuevo nodo `q`.
 			*qUno.codigo:= proy.clave.codigo                               // Leer el valor ingresado por el usuario y almacenarlo en `q.dato`.
 		
-			si (prim = nil) entonces                            // Caso 1: Si la lista está vacía:
-				prim := q                                //    - `q` se convierte en el primer nodo (prim).
+			si (primUno = nil) entonces                            // Caso 1: Si la lista está vacía:
+				prim := qUno                                //    - `q` se convierte en el primer nodo (prim).
 				*qUno.prox := *qUno                             //    - El nodo apunta a sí mismo, formando un ciclo.
 			sino                                         // Caso 2: Si la lista no está vacía:
-				p := prim                                //    - Inicializar `p` en el primer nodo.
+				k := primUno                                //    - Inicializar `p` en el primer nodo.
 		
 				// Recorrer la lista mientras no se vuelva al inicio (*p.prox <> prim) y
 				// el dato del nodo actual (*p.dato) sea menor que el nuevo dato (*q.dato).
 				
-				meintras (*p.prox <> prim) y (*p.dato < *q.dato) hacer
-					ant := p                             // Guardar el nodo actual como `ant` (anterior).
-					p := *p.prox                         // Avanzar al siguiente nodo.
+				meintras (*k.prox <> prim) y (*k.dato < *qUno.dato) hacer
+					antU := k                             // Guardar el nodo actual como `ant` (anterior).
+					k := *k.prox                         // Avanzar al siguiente nodo.
 				fm
 		
 				// Caso 2a: Insertar antes del primer nodo (nuevo valor es el menor de todos).
-				si (p = prim) entonces
-					k := prim                            // Inicializar `k` para buscar el último nodo.
-					MIENTRAS *k.prox <> prim HACER       // Recorrer la lista hasta encontrar el último nodo.
-						k := *k.prox                     // Avanzar al siguiente nodo.
+				si (k = prim) entonces
+					kP := prim                            // Inicializar `k` para buscar el último nodo.
+					MIENTRAS *kP.prox <> prim HACER       // Recorrer la lista hasta encontrar el último nodo.
+						kP := *kP.prox                     // Avanzar al siguiente nodo.
 					FM
-					*k.prox := q                         // El último nodo apunta al nuevo nodo `q`.
-					*qUno.prox := p                         // El nuevo nodo `q` apunta al primer nodo actual (`p`).
-					prim := q                            // Actualizar `prim` para que apunte al nuevo nodo.
+					*kP.prox := qUno                  // El último nodo apunta al nuevo nodo `q`.
+					*qUno.prox := k                         // El nuevo nodo `q` apunta al primer nodo actual (`p`).
+					prim := qUno                            // Actualizar `prim` para que apunte al nuevo nodo.
 		
 				 // Caso 2b: Insertar después del último nodo.
 				sino
@@ -112,7 +114,7 @@ Algoritmo
 					 // Caso 2c: Insertar entre dos nodos.
 					sino
 						*ant.prox := *qUno                      // El nodo anterior (`ant`) apunta al nuevo nodo `q`.
-						*qUno.prox := p 
+						*qUno.prox := k 
 					fs                        // El nuevo nodo `q` apunta al nodo actual (`p`).
 				fs
 			fs
@@ -121,6 +123,9 @@ Algoritmo
 		//segunda lista
 		si ((((resuelto + proceso)/erroresTotales)* 100) > 50 ) entonces
 			//carga ordena descendente
+
+			FALTO CAMBIAR NOMBRE DE LOS PUNTEROS, HAY QUE CAMBIAR POR LOS PUNTEROS A ESTE NODO
+
 			*qDos.nombre:= proy.nombre                                    // Crear un nuevo nodo `q`.
 			*qDos.codigo:= proy.clave.codigo  
 			mientas (p <> nil) Y (*q.dato > *p.dato) hacer  // carga ordenada de forma ascendente, para descendente *q.dato < *p.dato
