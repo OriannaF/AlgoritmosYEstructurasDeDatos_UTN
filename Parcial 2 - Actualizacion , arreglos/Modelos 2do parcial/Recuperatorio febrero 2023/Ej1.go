@@ -1,4 +1,4 @@
-Accion Ej1 es
+Accion Ej1(A: arreglo de alfanumerico de [1...26]) es
 Ambiente
 
 	productos = registro
@@ -62,6 +62,7 @@ Ambiente
 		//tomo las ventas por las concretadas solamente
 		si ( mov.cantidad > aux.stock ) entonces 
 			B[j]:= B[j] + aux.stock
+			totalVenta:= totalVenta * (((precio * aux.porcentajeDescuento) - precio) * aux.stock) 
 			aux.stock:= 0
 			Esc("Error, falta de stock")
 			productosFaltantes:= productosFaltantes + (mov.cantidad - aux.stock)	
@@ -90,6 +91,8 @@ Algoritmo
 	productosFaltantes:= 0 ; totalVenta:= 0 ; categoria:= 0
 	categoriaMenosVendida:= 0
 
+	LeerMae() ; LeerMov()
+
 	mientras (mov.clave <> HV) O (mae.clave <> HV) entonces
 		si ( mae.clave < mov.clave) entonces
 			//maestro a salida
@@ -112,7 +115,7 @@ Algoritmo
 
 				LeerMae()
 			sino
-				si ( mae.clave > mov.clave ) entonces
+				si ( mae.clave > mov.clave ) entonces //esta condicion está de as pero la pongo para guiarme, si el maestro es mayor no entra en ninguna de las anteriores y esta aca
 					//como no debe estar en el archivo si no existe, no hice nada aca para actualizar
 					productosFaltantes:= productosFaltantes + mov.cantidad
 					LeerMov()
@@ -140,3 +143,11 @@ Algoritmo
 	Esc("El importe total de ventas concretadas es de: ", totalVenta)
 
 fa
+
+// correcciones 
+// Una aclaración nomas, en el campo esPersonalizado, podes tomarlo como un booleano, pero de la forma en la que está tampoco estaría mal.
+//Arreglo de los nombres lo recibís como parámetro.: Accion_nmb(Noms:Arreglo...)
+//Lo del punto 2 sería que si todavía tenes stock, pero la cantidad que te piden es mayor, vendes lo que tenes y el restante lo contas. Ponele, si tengo en stock 2 camisetas, y me piden 3, cuento 1 en ese punto. Tenes que hacer la diferencia, justo lo que no querías jaja.
+//Al comienzo te falto leer los archivos.
+//No haría falta considerar casos separados para mov.cantidad = aux.stock, ó mov.cantidad < aux.stock, podes juntarlos en uno solo.
+//Esta condición está demás. Si las claves no son iguales, y tampoco la clave del maestro no es menor que el de movimiento, no hay otra chance jaja
