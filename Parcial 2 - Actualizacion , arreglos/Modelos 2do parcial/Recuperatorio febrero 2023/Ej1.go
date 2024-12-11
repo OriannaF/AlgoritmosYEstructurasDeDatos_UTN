@@ -50,16 +50,11 @@ Ambiente
 		fs
 	fp
 
-	//Lo q no me queda claro: si la preventa es mayor del stock, le tomo como vendido lo que tengo de stock o directamente no se concetra el pedido?
-	//lo voy a tomar como q no se puede concretar el pedido jejej (asi no tengo q calcular)
-
-	
 
 	procedimiento actualizarAux() es
 		j:= mov.nroJugador
-		categoria:= categoria + 1 //lo pongo aca porque aunque no se puede concretar la venta en un caso (cuando la cantidad solicitada es mayor) aun asi esta categoria es solicitada asi q la cuento igual
+		categoria:= categoria + 1 
 		nombreCategoria:= mov.categoria
-		//tomo las ventas por las concretadas solamente
 		si ( mov.cantidad > aux.stock ) entonces 
 			B[j]:= B[j] + aux.stock
 			totalVenta:= totalVenta * (((precio * aux.porcentajeDescuento) - precio) * aux.stock) 
@@ -67,7 +62,6 @@ Ambiente
 			Esc("Error, falta de stock")
 			productosFaltantes:= productosFaltantes + (mov.cantidad - aux.stock)	
 		sino
-			//en estos dos se puede concretar la venta asi q los cuento al total
 			si ( mov.cantidad = aux.stock ) entonces
 				//calcular venta
 				// no se de donde sacar el precio del producto asi q voy a usar la variable precio y finjir demencia :)
