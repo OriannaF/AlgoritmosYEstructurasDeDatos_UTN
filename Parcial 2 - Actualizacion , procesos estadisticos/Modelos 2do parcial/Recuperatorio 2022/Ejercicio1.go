@@ -81,6 +81,9 @@ ambiente
 	fp
  
 algoritmo
+
+	abrirE/(archMae) ; abrirE/(archMov) ; abrir/S(archSal)
+
 	mientras (mae.clave <> HV) O (mov.clave <> HV) hacer
 		si (mae.clave < mov.clave) entonces
 			//maestro a salida
