@@ -87,7 +87,7 @@ Algoritmo
 
 	LeerMae() ; LeerMov()
 
-	mientras (mov.clave <> HV) O (mae.clave <> HV) entonces
+	mientras (mov.clave <> HV) O (mae.clave <> HV) hacer
 		si ( mae.clave < mov.clave) entonces
 			//maestro a salida
 			act := mae
