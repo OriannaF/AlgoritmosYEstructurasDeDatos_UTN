@@ -65,7 +65,7 @@ algoritmo
         fs
     fp
 
-    esc("La regional con más papers es, " , A[j], "con ", mayorPaper, " papers.")
+    esc("La regional con más papers es, " , reginal[posicionMayor], "con ", mayorPaper, " papers.")
 
     cerrar(archPaper)
     
