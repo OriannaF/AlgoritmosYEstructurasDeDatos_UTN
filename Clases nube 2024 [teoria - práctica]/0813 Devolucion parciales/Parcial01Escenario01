@@ -1,0 +1,242 @@
+=======================
+ESCENARIO 1
+=======================
+EJERCICIO 1
+
+ca_vehiculos:=0
+tot_peaje:=0
+Mientras NFDS(sec) hacer
+	dia1:=v; Avanzar(sec, v);
+	dia2:=v; Avanzar(sec, v);
+	dia:= Convertir(dia1)*10+Convertir(dia2)
+	
+	dia_semana:=DiaDeLaSemana(dia, 6, 2024)
+	
+	es_feriado:=v = "S"; Avanzar(sec, v);
+	
+	cont1:=0; cont2:=0; cont3:=0; cont4:=0; cont5:=0
+	peaje:=0
+	Mientras v <> "!" hacer
+		categoria:=v; Avanzar(sec, v);
+		
+		Segun categoria hacer
+			1: cont1:= cont1+1; peaje:= peaje+900
+			2:
+			3:
+			4:
+			5: cont5:= cont5+1; peaje:= peaje+4500
+		FinSegun
+		
+		hora1:=v; Avanzar(sec, v);
+		hora2:=v; Avanzar(sec, v);
+		min1:=v; Avanzar(sec, v);
+		min2:=v; Avanzar(sec, v);
+		pat1:=v; Avanzar(sec, v);
+		pat2:=v; Avanzar(sec, v);
+		pat3:=v; Avanzar(sec, v);
+		pat4:=v; Avanzar(sec, v);
+		pat5:=v; Avanzar(sec, v);
+		pat6:=v; Avanzar(sec, v);
+		
+		guardar:= dia_semana = "Viernes" o dia_semana = "Sabado" o dia_semana = "Domingo"
+		
+		Si guardar entonces
+			Escribir(salida, hora1);Escribir(salida, hora2);
+			Escribir(salida, pat1);Escribir(salida, pat2);
+			Escribir(salida, pat3);Escribir(salida, pat4);
+			Escribir(salida, pat5);Escribir(salida, pat6);
+			Escribir(salida, "-")
+		FinSi
+		
+	FinMientras
+	Escribir("La cantidad de vehiculos de la categoria 1 que pasaron el dia: ", dia,"/06/2024, es de:", cont1)
+	[...]
+	
+	Si es_feriado entonces
+		ca_vehiculos:=cont1+cont2+cont3+cont4+cont5
+		tot_peaje:= tot_peaje+peaje
+	FinSi
+	Avanzar(sec, v);
+FinMientras
+Escribir("La cantidad de vehiculos que pasaron los dias feriados es de: ", ca_vehiculos)
+Escribir("Total recaudado los feriados:", tot_peaje)
+
+/* ================================================================ */
+
+EJERCICIO 2
+
+Procedimiento CorteDia() es 
+	Escribir("La cantidad total de vehiculos que pasaron mas de dos veces en el dia", resg_dia, "es de", ca_vehiculos)
+	
+	ca_vehiculos_mes:= ca_vehiculos_mes + ca_vehiculos
+	
+	resg_dia:= reg.dia
+	
+	ca_vehiculos:=0
+FinProcedimiento
+
+Procedimiento CorteMes es
+	CorteDia()
+	
+	Escribir("La cantidad total de vehiculos que pasaron mas de dos veces en el mes", resg_mes, "es de", ca_vehiculos_mes)
+	
+	ca_vehiculos_anio:=ca_vehiculos_anio+ca_vehiculos_mes
+	
+	ca_vehiculos_mes:=0
+	resg_mes:= reg.mes
+	
+FinProcedimiento
+
+Procedimiento CorteAnio() es
+CorteMes()
+	
+	Escribir("La cantidad total de vehiculos que pasaron mas de dos veces en el año", resg_anio, "es de", ca_vehiculos_anio)
+	
+	ca_vehiculos_gen:=ca_vehiculos_gen+ca_vehiculos_anio
+	
+	ca_vehiculos_anio:=0
+	resg_anio:= reg.anio
+	
+FinProcedimiento
+
+
+
+Leer(fecha_us)
+
+Mientras NFDA(arch) hacer
+	Si resg_anio <> reg.anio entonces
+		CorteAnio()
+	Sino
+		Si resg_mes <> reg.mes entonces 
+			CorteMes()
+		Sino 
+			Si resg_dia <> reg.dia entonces
+				CorteDia()
+			FinSi
+		FinSi
+	FinSi
+
+	Si reg.cant_pases > 2 entonces
+		ca_vehiculos:=ca_vehiculos+1
+	FinSi
+	
+	fecha_vehiculo.anio:= reg.anio
+	fecha_vehiculo.mes:= reg.mes
+	fecha_vehiculo.dia := reg.dia
+	Si fecha_vehiculo = fecha_us entonces
+		sal.anio:= reg.anio
+		[...]
+		sal.patente:=reg.patente
+		Grabar(salida,  sal)
+	FinSi
+FinMientras
+
+
+==============================================
+				ESCENARIO 2
+==============================================
+Ejercicio 1
+
+Escribir("Ingrese categoria"); Leer(categoria_us)
+Mientras NFDS(Sec) hacer
+
+	dia1:=v; Avanzar(sec, v);
+	dia2:=v; Avanzar(sec, v);
+	dia:= Convertir(dia1)*10+Convertir(dia2)
+	
+	dia_semana:=DiaDeLaSemana(dia, 6, 2024) // No se usa
+	
+	es_feriado:=v = "S"; Avanzar(sec, v); // No se usa
+	recaudacion:=0
+	Mientras v <> "!" hacer
+		categoria:=v; Avanzar(sec, v);
+		
+		Segun categoria hacer
+			1: cont1:= cont1+1; recaudacion:= recaudacion+900
+			2:
+			3:
+			4:
+			5: cont5:= cont5+1; recaudacion:= recaudacion+4500
+		FinSegun
+		
+		hora1:=v; Avanzar(sec, v);
+		hora2:=v; Avanzar(sec, v);
+		min1:=v; Avanzar(sec, v);
+		min2:=v; Avanzar(sec, v);
+		pat1:=v; Avanzar(sec, v);
+		pat2:=v; Avanzar(sec, v);
+		pat3:=v; Avanzar(sec, v);
+		pat4:=v; Avanzar(sec, v);
+		pat5:=v; Avanzar(sec, v);
+		pat6:=v; Avanzar(sec, v);
+		pat7:=v; Avanzar(sec, v);
+		
+		Si categoria = categoria_us entonces 
+			Escribir(salida, hora1);Escribir(salida, hora2);
+			Escribir(salida, pat1);Escribir(salida, pat2);
+			Escribir(salida, pat3);Escribir(salida, pat4);
+			Escribir(salida, pat5);Escribir(salida, pat6);
+			Escribir(salida,  );
+			Escribir(salida, "#")
+		FinSi
+		
+	FinMientras
+	
+	Escribir("La cantidad recaudada es de: ", recaudacion)
+	Escribir("% Cat1", cont1*100/(cont1+cont2+cont3+cont4+cont5))
+
+FinMientras
+
+
+Ejercicio 2
+
+
+Procedimiento CorteDia() es
+	// Escribir("La cantidad de pases del dia es de:",cant_vehiculos)
+	cant_vehiculos_mes:=cant_vehiculos+cant_vehiculos_mes
+	
+	sal.anio:= resg_anio
+	[...]
+	Grabar(salida, sal)
+	
+	cant_vehiculos:=0
+	resg_dia:=reg.dia
+FinProcedimiento
+
+Procedimiento CorteMes() es
+	CorteDia()
+	Escribir("La cantidad de pases del mes es de:",cant_vehiculos_mes)
+	cant_vehiculos_anio:=cant_vehiculos_anio+cant_vehiculos_mes
+	cant_vehiculos_mes:=0
+	resg_mes:=reg.mes
+FinProcedimiento
+
+Procedimiento CorteAnio() es
+	CorteMes()
+	Escribir("La cantidad de pases del anio es de:",cant_vehiculos_anio)
+	cant_vehiculos_gral:=cant_vehiculos_gral+cant_vehiculos_anio
+	if cant_vehiculos_anio > ca_anio_mayor entonces
+		ca_anio_mayor:=cant_vehiculos_anio
+		anio_mayor:= resg_anio
+	FinSi
+	cant_vehiculos_anio:=0
+	resg_anio:= reg.anio
+FinProcedimiento
+
+Mientras NFDA(arch) hacer
+
+	Si resg_anio <> reg.anio entonces
+		CorteAnio()
+	Sino
+		Si resg_mes <> reg.mes entonces 
+			CorteMes()
+		Sino 
+			Si resg_dia <> reg.dia entonces
+				CorteDia()
+			FinSi
+		FinSi
+	FinSi
+	
+	cant_vehiculos:=cant_vehiculos+1
+	
+FinMientras

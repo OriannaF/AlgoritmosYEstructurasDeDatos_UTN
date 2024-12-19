@@ -1,0 +1,87 @@
+    Facturas = Registro 
+        nro_cliente 
+        nro_factura
+        fecha
+        importe
+    FinRegistro
+
+    Clientes = Registro 
+        nro_cliente
+        nombre
+        nro_factura
+    FinRegistro
+
+
+    arch_fact: Archivo de Facturas ordenado por nro_cliente, nro_factura
+    f: Facturas
+
+    arch_cli: Archivo de Clientes indexado por nro_cliente
+    c: Clientes
+
+Proceso
+    Abrir E/ (arch_fact) ; Leer(arch_fact, f)
+    Abrir E/ (arch_cli)
+
+    Escribir("NRO CLIENTE, NOMBRE CLIENTE, NUMERO FACTURA")
+    Escribir("-------------------------------------------")
+    Mientras NFDA(arch_fact) hacer
+        c.nro_cliente:= f.nro_cliente
+        Leer(arch_cli, c)
+        Si EXISTE entonces
+            Escribir(c.nro_cliente, c.nombre, f.nro_factura)
+        Sino
+            Escribir("El cliente: ", f.nro_cliente, " no existe.")
+        FinSi
+
+        Leer(arch_fact, f)
+    FinMientras
+
+
+Nro_Cliente Nro_Factura Fecha   Importe
+1               1          02/08 100        <-- f
+2               2          03/08  500
+3               3          -- ------
+4
+..
+
+
+Nro_Cliente nombre 
+1           lucas 
+2           gustavo
+
+------------------
+// Actualizar un registro de un archivo indexado 
+
+Abrir E/S (arch_cli)
+
+c.nro_cliente:= 10
+Leer(arch_cli, c)
+Si EXISTE entonces
+    Escribir("Ingrese un nuevo importe")
+    Leer(nuevo_importe)
+    c.importe:= nuevo_importe
+    {...}
+    RE-GRABAR(arch_cli, c)
+Sino
+    Escribir("El cliente 10 no existe")
+    Escribir("ingrese los datos para darlo de alta")
+    c.nro_cliente:= 10 
+    {...}
+    c.nro_factura:= nuevo_nro_factura
+    c.fecha:= nuevo_fecha
+    c.importe:= nuevo_importe
+
+    GRABAR(arch_cli, c)
+FinSi
+
+
+Si EXISTE entonces
+    Borrar(arch_cli, c)
+
+FinSi
+
+
+
+
+
+

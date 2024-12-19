@@ -1,0 +1,44 @@
+
+
+Mientras 
+    Si ra.dni < rf.dni entonces 
+        // Avanzar agosto
+    Sino
+        Si ra.dni > rf.dni entonces
+            // Avanzar febrero
+        Sino
+            // Si ra.aprobado = "NO" y rf.aprobado = "NO" entonces
+            Si rf.aprobado = "NO" entonces
+                // Copiar salida
+                // Avanzar ambos
+            FinSi
+        FinSi
+    FinSi
+
+FinMientras
+
+
+/*  ---------------------------- */
+
+Escribir("Cod_Prod	Tipo	Marca	Descripción	Cant_Suc_1	Cant_Suc_2	Total_Unidades")
+Mientras s1.Cod_Prd <> HV o s2.Cod_Prd <> HV hacer
+    Si s1.Cod_Prd < s2.cod_Prd entonces
+        rs:= s1
+        Grabar(salida, s1)
+        Escribir(s1.cod_Prod, s1.tipo, s1.marca, s1.descripcion, s1.cant_unidades, 0, s1.cant_unidades)
+        LeerSucursal1()
+    sino 
+        Si s1.Cod_Prd > s2.cod_Prd entonces
+      
+            Grabar(salida, s2)
+            Escribir(s2.cod_Prod, s2.tipo, s2.marca, s2.descripcion, 0, s2.cant_unidades, s2.cant_unidades)
+            LeerSucursal2()
+        Sino
+            s2.cant_unidades:= s2.cant_unidades + s1.cant_unidades
+            Grabar(salida, s2)
+            Escribir(s2.cod_Prod, s2.tipo, s2.marca, s2.descripcion, s1.cant_unidades, s2.cant_unidades, s1.cant_unidades+s2.cant_unidades)
+            LeerSucursal2()
+        FinSi
+    FinSi
+
+FinMientras
