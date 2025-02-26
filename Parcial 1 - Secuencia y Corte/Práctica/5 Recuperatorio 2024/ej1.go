@@ -1,3 +1,5 @@
+//26/02/25 preparando el final :)
+
 //1. Si el pais no tiene historial destacado, historial -> P. Si el deporte del atleta comienza con vocal.
 // Secuencia de salida con nombre del pais, finalizado con "#". Separar info de cada jugador con "%" y finalizar cada seccion con "@"
 // pais#nombreApellidoAteta%otroAtleta@paisDos#atletaDos%otroAtleta
@@ -12,7 +14,7 @@ Ambiente
 	historial: secuencia de caracteres
 	h,d: caracter
 	deportes: secuencia de caracteres
-	igualan, superan
+	igualan, superan, edad, deporte: entero
 
 	funcion covertir(d: caracter): entero // no estoy segura de esta funcion tt
 		segun d hacer
@@ -55,16 +57,16 @@ Ambiente
 	fp
 
 	procedimiento saltarDeporteYVerificar() es
-		Avz(deportes,d)
 		si (d EN vocales) entonces
 			Avz(deportes,d) ; Avz(deportes,d)
 			deporte:= true
 		fs	
+		Avz(deportes,d)
 	fp
 
 	procedimiento salidaAtleta() es
 		Repetir
-			Esc(salida,d) ; Avz(deporte,d)
+			Avz(deporte,d) ; Esc(salida,d)
 		hasta h = "#"
 		Avz(deporte,d)
 	fp
@@ -75,21 +77,46 @@ Ambiente
 		hasta d = "#"
 	fp
 
+	procedimiento Iniciar() es
+		Arr(historial); Arr(deportes)
+		Avz(deporte,d) ; Avz(historial,h)
+	fp
+
 	
 Algoritmo
 
 	Iniciar() ; Crear(salida) 
 
+	Esc("Ingrese la edad") ; leer(edadUsuario)
+
 	mientras NFDS(historial) hacer
 		si (historial = "P") entonces
 			salidaPais() ; Esc(salida,"#")
-			saltarDeporteYVerificar() ; edadAtleta() 
-			si (deporte = true) entonces
-				salidaAtleta() ; Esc(salida,"%")
-			sino
-				saltarAtleta()
-			fs
+			Repetir
+				saltarDeporteYVerificar()  
+				edadAtleta() //punto b
+				si (deporte = true) entonces
+					salidaAtleta() ; Esc(salida,"%")
+				sino
+					saltarAtleta()
+				fs
+			Hasta d = "@"
+
+			Esc(salida,"@")
+
+			//informar act b
+			Esc("En esta delegacion, hay", igualan ,"deportistas de edad igual a la ingresada", superan ,"deportistas supera la edad ingresada.")
+			superan:= 0 ; igualan := 0
+
+		sino
+			Repetir
+				Avz(deporte,d) ; Avz(historial,h)
+			Hasta d = "#"
+			Avz(deporte,d) ; Avz(historial,h)
 		fs
+
 	fm
+
+	cerrar(deporte) ; cerrar(historial)
 
 Fa
